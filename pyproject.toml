@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "int8rt"
+version = "0.1.0"
+description = "NumPy INT8 inference runtime with an accelerator cost model"
+requires-python = ">=3.10"
+dependencies = ["numpy", "onnx", "pyyaml"]
+
+[tool.setuptools.packages.find]
+include = ["int8rt*", "costmodel*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_unused_ignores = true
+check_untyped_defs = true
+files = ["int8rt", "costmodel", "tools", "tests"]
+explicit_package_bases = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -1,0 +1,11 @@
+# Exact pins. ORT parity (see docs/DESIGN.md) is defined against this onnxruntime version.
+numpy==2.5.4
+onnx==1.23.2
+onnxruntime==1.31.1
+torch==2.15.0
+torchvision==0.29.2
+PyYAML==6.0.3
+matplotlib==3.11.2
+pytest==9.2.0
+ruff==0.17.3
+mypy==2.4.1
