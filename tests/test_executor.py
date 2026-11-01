@@ -72,11 +72,6 @@ def test_validates_inputs() -> None:
         ex.run({"f": np.zeros((1, 1, 2, 2), dtype=np.float32)})
 
 
-def test_greedy_planner_is_not_available_until_m4() -> None:
-    with pytest.raises(NotImplementedError):
-        Executor(tiny_graph(), planner="greedy")
-
-
 def test_dump_dir_writes_every_tensor_and_an_index(tmp_path: Path) -> None:
     x = np.zeros((1, 1, 4, 4), dtype=np.float32)
     Executor(tiny_graph(), dump_dir=tmp_path).run({"f": x})
