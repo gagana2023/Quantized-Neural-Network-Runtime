@@ -12,7 +12,7 @@ Two modes (see docs/DESIGN.md):
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal
+from typing import Any, Literal
 
 import numpy as np
 import numpy.typing as npt
@@ -41,11 +41,11 @@ class QParams:
 
 
 def make_qparams(
-    x_scale: float,
+    x_scale: float | np.floating[Any],
     x_zp: int,
     w_scale: float | npt.ArrayLike,
     w_zp: int | npt.ArrayLike,
-    y_scale: float,
+    y_scale: float | np.floating[Any],
     y_zp: int,
 ) -> QParams:
     """Build a ``QParams`` with the dtypes the kernels expect."""
