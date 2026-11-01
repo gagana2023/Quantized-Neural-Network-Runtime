@@ -1,0 +1,10 @@
+# Base configuration of the generic analytical accelerator model (not any real chip).
+# Every value is an assumption chosen to be small-edge-device-like; see docs/DESIGN.md D25-D29.
+name: base
+array_rows: 16            # MAC array: rows map to output channels (M)
+array_cols: 16            # columns map to output pixels (N); R x C INT8 MACs per cycle
+weight_sram_bytes: 32768  # 32 KiB; a double-buffered tile may use half
+act_sram_bytes: 65536     # 64 KiB input tile + INT32 accumulators; a tile may use half
+dma_bytes_per_cycle: 8    # DRAM <-> SRAM
+vector_lanes: 16          # element operations per cycle on the vector unit
+clock_mhz: 500            # only used to convert cycles to modelled microseconds
