@@ -88,3 +88,37 @@ over 100 inputs per model and the accuracy comparison are M3.
 - Mode B is not compared with ORT yet (M3). `cli.py` is not written yet (arrives with the planner, M4).
 - Not implemented because they appear in neither model: QLinearAdd, QLinearAveragePool, Reshape, N-D QLinearMatMul, dilation != 1.
 - Kernel signatures differ slightly between ops with and without weights (DESIGN D14).
+
+## M3 — Full-model parity (done)
+
+**Built:** `tools/compare_ort.py` (ORT with every intermediate tapped, byte comparison in execution order, first-divergence report,
+Mode B isolated and cumulative deviation, full-test-set accuracy) and `tests/test_compare_ort.py`.
+Run: `python -m tools.compare_ort --model cifar` and `--model kws`. The KWS model is Project 2's (`models/kws/kws/SOURCE.json`, commit f7b2a39).
+
+**Numerical correctness (float mode vs ORT 1.31.1; `results/parity_<model>.json`):**
+
+| Model | Inputs | Layers | Tensor comparisons exact | Final logits exact (whole test set) |
+| --- | --- | --- | --- | --- |
+| CIFAR CNN | 100 | 11 | 1100 / 1100 | 10,000 / 10,000 |
+| KWS DS-CNN | 100 | 15 | 1500 / 1500 | 4,888 / 4,888 |
+
+**Accuracy (`results/accuracy_<model>.json`, whole test sets):**
+
+| Model | ORT FP32 | ORT INT8 | int8rt float | int8rt fixed |
+| --- | --- | --- | --- | --- |
+| CIFAR (10,000) | 76.90% | 76.94% | 76.94% | 76.88% |
+| KWS (4,888) | 92.82% | 92.78% | 92.78% | 92.74% |
+
+int8rt float accuracy equals ORT INT8 on both models. KWS ORT logits are also identical to the logits Project 2 stored.
+
+**Mode B (fixed-point) deviation from Mode A:**
+- *Isolated*, per node: QLinearConv differs in 0.04-0.27% of elements, never by more than 1 LSB. CIFAR's QLinearGlobalAveragePool differs in 6.97% of elements (1 LSB), the largest single-node effect. (Likely cause: averaging produces many exact ties, and float mode rounds half to even while gemmlowp rounds half up; I have not isolated this by experiment.)
+- *Cumulative*: differences compound: max 2 LSB (CIFAR conv), up to 9 LSB (KWS last conv layers); final logits differ in 11.5% (CIFAR, max 0.12) and 22.6% (KWS, max 0.44) of elements.
+- *End to end*: predicted class changes on 45/10,000 CIFAR inputs (accuracy -0.06 points) and 18/4,888 KWS clips (-0.04 points).
+
+**Checks (local):** `ruff`, `mypy` clean; `pytest`: 385 passed (10 new); CI still has not run (no GitHub remote).
+
+**Caveats**
+- Per-layer parity covers the first 100 inputs per model (the spec's minimum); only the final logits are checked on every test input.
+- Results JSON records `+dirty` commits because earlier results files were untracked while later runs started; the code commit is `3ec7e48`. The `what` label in `accuracy_cifar.json` was corrected by hand after the run (a tool bug kept the old M0 label, fixed in the tool afterwards); no numbers were edited.
+- Host CPU wall times in the JSON are incidental, not performance claims.

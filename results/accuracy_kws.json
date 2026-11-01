@@ -1,0 +1,52 @@
+{
+  "env": {
+    "date": "2026-11-01T05:57:24+05:30",
+    "git_commit": "74c3b7c24c7671b0a867edd388f3bfaa9f6290b7+dirty",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.10",
+    "packages": {
+      "numpy": "2.5.4",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.1",
+      "torch": "2.15.0",
+      "torchvision": "0.29.2",
+      "PyYAML": "6.0.3"
+    },
+    "command": "python -m tools.compare_ort --model kws"
+  },
+  "what": "Test accuracy: ORT CPU (graph optimisations disabled) and int8rt, float and fixed-point requantisation, all measured on the same inputs",
+  "test_images": 4888,
+  "ort_fp32_accuracy": 0.9281914893617021,
+  "ort_int8_accuracy": 0.9277823240589198,
+  "int8rt_float_accuracy": 0.9277823240589198,
+  "int8rt_fixed_accuracy": 0.9273731587561375,
+  "correct_counts": {
+    "ort_fp32": 4537,
+    "ort_int8": 4535,
+    "int8rt_float": 4535,
+    "int8rt_fixed": 4533
+  },
+  "float_mode_logits_bit_exact_with_ort_int8": {
+    "inputs": 4888,
+    "of": 4888
+  },
+  "float_mode_accuracy_equals_ort_int8": true,
+  "fixed_mode_vs_float_mode": {
+    "inputs_whose_logits_differ": 4556,
+    "inputs_whose_predicted_class_differs": 18,
+    "logit_deviation": {
+      "elements": 58656,
+      "differing_elements": 13253,
+      "differing_percent": 22.594448990725585,
+      "max_abs_difference": 0.43747520446777344,
+      "unit": "float value"
+    },
+    "accuracy_change_points": -0.04091653027823241
+  },
+  "wall_seconds_measured_on_host": 171.2,
+  "project2_reference_logits": {
+    "inputs": 4888,
+    "identical_to_project2_stored_logits_int8": 4888
+  }
+}

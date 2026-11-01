@@ -442,6 +442,7 @@ def main() -> None:
         old.pop("ort_fp32_accuracy", None)
         old.pop("ort_int8_accuracy", None)
         old.pop("test_images", None)
+        old.pop("what", None)
         extra: dict[str, Any] = {}
         if spec.name == "kws":
             extra["project2_reference_logits"] = kws_reference_check(images, spec)

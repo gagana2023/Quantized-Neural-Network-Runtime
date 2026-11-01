@@ -1,5 +1,5 @@
 {
-  "env": {
+  "env_m0_quantisation": {
     "date": "2026-11-01T05:29:39+05:30",
     "git_commit": "fde61f0e70eb1f95fe467595bf37c6bd6cb9adde+dirty",
     "cpu": "13th Gen Intel(R) Core(TM) i7-13650HX",
@@ -15,15 +15,56 @@
     },
     "command": "python -m tools.export_quantize --arch cifar"
   },
-  "what": "Test accuracy measured by ONNX Runtime CPU (graph optimisations disabled)",
-  "test_images": 10000,
+  "env": {
+    "date": "2026-11-01T06:00:56+05:30",
+    "git_commit": "3ec7e4896dae94c612c9693d7ca2ae1dff156cf8+dirty",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.10",
+    "packages": {
+      "numpy": "2.5.4",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.1",
+      "torch": "2.15.0",
+      "torchvision": "0.29.2",
+      "PyYAML": "6.0.3"
+    },
+    "command": "python -m tools.compare_ort --model cifar"
+  },
+  "what": "Test accuracy: ORT CPU (graph optimisations disabled) and int8rt, float and fixed-point requantisation, all measured on the same inputs",
   "calibration": {
     "samples": 200,
     "method": "MinMax",
     "source": "CIFAR-10 train set"
   },
   "quantization": "QOperator, QInt8 activations, QInt8 weights, per-channel",
+  "test_images": 10000,
   "ort_fp32_accuracy": 0.769,
   "ort_int8_accuracy": 0.7694,
-  "int8rt_accuracy": null
+  "int8rt_float_accuracy": 0.7694,
+  "int8rt_fixed_accuracy": 0.7688,
+  "correct_counts": {
+    "ort_fp32": 7690,
+    "ort_int8": 7694,
+    "int8rt_float": 7694,
+    "int8rt_fixed": 7688
+  },
+  "float_mode_logits_bit_exact_with_ort_int8": {
+    "inputs": 10000,
+    "of": 10000
+  },
+  "float_mode_accuracy_equals_ort_int8": true,
+  "fixed_mode_vs_float_mode": {
+    "inputs_whose_logits_differ": 6955,
+    "inputs_whose_predicted_class_differs": 45,
+    "logit_deviation": {
+      "elements": 100000,
+      "differing_elements": 11490,
+      "differing_percent": 11.49,
+      "max_abs_difference": 0.11998748779296875,
+      "unit": "float value"
+    },
+    "accuracy_change_points": -0.06
+  },
+  "wall_seconds_measured_on_host": 1255.2
 }

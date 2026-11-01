@@ -1,0 +1,638 @@
+{
+  "env": {
+    "date": "2026-11-01T05:57:24+05:30",
+    "git_commit": "74c3b7c24c7671b0a867edd388f3bfaa9f6290b7+dirty",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.10",
+    "packages": {
+      "numpy": "2.5.4",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.1",
+      "torch": "2.15.0",
+      "torchvision": "0.29.2",
+      "PyYAML": "6.0.3"
+    },
+    "command": "python -m tools.compare_ort --model kws"
+  },
+  "what": "int8rt (float requantisation, Mode A) against ONNX Runtime CPU, byte for byte, on every node output",
+  "model": "models\\kws\\kws\\dscnn_int8.onnx",
+  "ort_tapped_tensors": 14,
+  "input_source": "first 100 test-set inputs, in dataset order",
+  "inputs_tested": 100,
+  "layers_compared": 15,
+  "tensor_comparisons": 1500,
+  "exact_matches": 1500,
+  "inputs_with_any_mismatch": 0,
+  "float_mode_bit_exact_on_every_layer_and_input": true,
+  "first_mismatch": null,
+  "layers": [
+    {
+      "node": "mfcc_QuantizeLinear",
+      "op": "QuantizeLinear",
+      "tensor": "mfcc_quantized",
+      "shape": [
+        1,
+        1,
+        49,
+        10
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/stem/stem.0/Conv_quant",
+      "op": "QLinearConv",
+      "tensor": "/stem/stem.0/Conv_output_0_quantized",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/blocks/blocks.0/blocks.0.0/Conv_quant",
+      "op": "QLinearConv",
+      "tensor": "/blocks/blocks.0/blocks.0.0/Conv_output_0_quantized",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/blocks/blocks.0/blocks.0.3/Conv_quant",
+      "op": "QLinearConv",
+      "tensor": "/blocks/blocks.0/blocks.0.3/Conv_output_0_quantized",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/blocks/blocks.1/blocks.1.0/Conv_quant",
+      "op": "QLinearConv",
+      "tensor": "/blocks/blocks.1/blocks.1.0/Conv_output_0_quantized",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/blocks/blocks.1/blocks.1.3/Conv_quant",
+      "op": "QLinearConv",
+      "tensor": "/blocks/blocks.1/blocks.1.3/Conv_output_0_quantized",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/blocks/blocks.2/blocks.2.0/Conv_quant",
+      "op": "QLinearConv",
+      "tensor": "/blocks/blocks.2/blocks.2.0/Conv_output_0_quantized",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/blocks/blocks.2/blocks.2.3/Conv_quant",
+      "op": "QLinearConv",
+      "tensor": "/blocks/blocks.2/blocks.2.3/Conv_output_0_quantized",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/blocks/blocks.3/blocks.3.0/Conv_quant",
+      "op": "QLinearConv",
+      "tensor": "/blocks/blocks.3/blocks.3.0/Conv_output_0_quantized",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/blocks/blocks.3/blocks.3.3/Conv_quant",
+      "op": "QLinearConv",
+      "tensor": "/blocks/blocks.3/blocks.3.3/Conv_output_0_quantized",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/blocks/blocks.3/blocks.3.5/Relu_output_0_DequantizeLinear",
+      "op": "DequantizeLinear",
+      "tensor": "/blocks/blocks.3/blocks.3.5/Relu_output_0",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "dtype": "float32",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/ReduceMean",
+      "op": "ReduceMean",
+      "tensor": "/ReduceMean_output_0",
+      "shape": [
+        1,
+        64
+      ],
+      "dtype": "float32",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/ReduceMean_output_0_QuantizeLinear",
+      "op": "QuantizeLinear",
+      "tensor": "/ReduceMean_output_0_quantized",
+      "shape": [
+        1,
+        64
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "/fc/Gemm_quant",
+      "op": "QGemm",
+      "tensor": "logits_quantized",
+      "shape": [
+        1,
+        12
+      ],
+      "dtype": "int8",
+      "exact_matches": 100,
+      "inputs": 100
+    },
+    {
+      "node": "logits_DequantizeLinear",
+      "op": "DequantizeLinear",
+      "tensor": "logits",
+      "shape": [
+        1,
+        12
+      ],
+      "dtype": "float32",
+      "exact_matches": 100,
+      "inputs": 100
+    }
+  ],
+  "mode_b_vs_mode_a": {
+    "note": "Mode A is bit-exact with ORT (above), so these are also deviations from ORT. 'isolated': each node run in fixed-point on Mode A's input tensors, so only that node's requantiser differs. 'cumulative': the whole network free-running in fixed-point, so earlier differences propagate. Integer tensors are in LSBs; the float output (logits) is in value units.",
+    "isolated": [
+      {
+        "node": "mfcc_QuantizeLinear",
+        "op": "QuantizeLinear",
+        "elements": 49000,
+        "differing_elements": 0,
+        "differing_percent": 0.0,
+        "max_abs_difference": 0.0,
+        "unit": "LSB",
+        "difference_histogram": {}
+      },
+      {
+        "node": "/stem/stem.0/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 1144,
+        "differing_percent": 0.143,
+        "max_abs_difference": 1.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "1": 1144
+        }
+      },
+      {
+        "node": "/blocks/blocks.0/blocks.0.0/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 1278,
+        "differing_percent": 0.15975,
+        "max_abs_difference": 1.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "1": 1278
+        }
+      },
+      {
+        "node": "/blocks/blocks.0/blocks.0.3/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 1542,
+        "differing_percent": 0.19275,
+        "max_abs_difference": 1.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "1": 1542
+        }
+      },
+      {
+        "node": "/blocks/blocks.1/blocks.1.0/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 2151,
+        "differing_percent": 0.268875,
+        "max_abs_difference": 1.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "1": 2151
+        }
+      },
+      {
+        "node": "/blocks/blocks.1/blocks.1.3/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 1251,
+        "differing_percent": 0.156375,
+        "max_abs_difference": 1.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "1": 1251
+        }
+      },
+      {
+        "node": "/blocks/blocks.2/blocks.2.0/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 1483,
+        "differing_percent": 0.185375,
+        "max_abs_difference": 1.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "1": 1483
+        }
+      },
+      {
+        "node": "/blocks/blocks.2/blocks.2.3/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 808,
+        "differing_percent": 0.101,
+        "max_abs_difference": 1.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "1": 808
+        }
+      },
+      {
+        "node": "/blocks/blocks.3/blocks.3.0/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 1143,
+        "differing_percent": 0.142875,
+        "max_abs_difference": 1.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "1": 1143
+        }
+      },
+      {
+        "node": "/blocks/blocks.3/blocks.3.3/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 1499,
+        "differing_percent": 0.187375,
+        "max_abs_difference": 1.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "1": 1499
+        }
+      },
+      {
+        "node": "/blocks/blocks.3/blocks.3.5/Relu_output_0_DequantizeLinear",
+        "op": "DequantizeLinear",
+        "elements": 800000,
+        "differing_elements": 0,
+        "differing_percent": 0.0,
+        "max_abs_difference": 0.0,
+        "unit": "float value"
+      },
+      {
+        "node": "/ReduceMean",
+        "op": "ReduceMean",
+        "elements": 6400,
+        "differing_elements": 0,
+        "differing_percent": 0.0,
+        "max_abs_difference": 0.0,
+        "unit": "float value"
+      },
+      {
+        "node": "/ReduceMean_output_0_QuantizeLinear",
+        "op": "QuantizeLinear",
+        "elements": 6400,
+        "differing_elements": 0,
+        "differing_percent": 0.0,
+        "max_abs_difference": 0.0,
+        "unit": "LSB",
+        "difference_histogram": {}
+      },
+      {
+        "node": "/fc/Gemm_quant",
+        "op": "QGemm",
+        "elements": 1200,
+        "differing_elements": 0,
+        "differing_percent": 0.0,
+        "max_abs_difference": 0.0,
+        "unit": "LSB",
+        "difference_histogram": {}
+      },
+      {
+        "node": "logits_DequantizeLinear",
+        "op": "DequantizeLinear",
+        "elements": 1200,
+        "differing_elements": 0,
+        "differing_percent": 0.0,
+        "max_abs_difference": 0.0,
+        "unit": "float value"
+      }
+    ],
+    "cumulative": [
+      {
+        "node": "mfcc_QuantizeLinear",
+        "op": "QuantizeLinear",
+        "elements": 49000,
+        "differing_elements": 0,
+        "differing_percent": 0.0,
+        "max_abs_difference": 0.0,
+        "unit": "LSB",
+        "difference_histogram": {}
+      },
+      {
+        "node": "/stem/stem.0/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 1144,
+        "differing_percent": 0.143,
+        "max_abs_difference": 1.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "1": 1144
+        }
+      },
+      {
+        "node": "/blocks/blocks.0/blocks.0.0/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 2406,
+        "differing_percent": 0.30075,
+        "max_abs_difference": 2.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "-2": 1,
+          "-1": 443,
+          "1": 1958,
+          "2": 4
+        }
+      },
+      {
+        "node": "/blocks/blocks.0/blocks.0.3/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 14984,
+        "differing_percent": 1.873,
+        "max_abs_difference": 2.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "-2": 6,
+          "-1": 6461,
+          "1": 8516,
+          "2": 1
+        }
+      },
+      {
+        "node": "/blocks/blocks.1/blocks.1.0/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 25411,
+        "differing_percent": 3.176375,
+        "max_abs_difference": 3.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "-3": 3,
+          "-2": 317,
+          "-1": 10912,
+          "1": 13814,
+          "2": 357,
+          "3": 8
+        }
+      },
+      {
+        "node": "/blocks/blocks.1/blocks.1.3/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 75724,
+        "differing_percent": 9.4655,
+        "max_abs_difference": 3.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "-3": 6,
+          "-2": 518,
+          "-1": 36035,
+          "1": 38575,
+          "2": 583,
+          "3": 7
+        }
+      },
+      {
+        "node": "/blocks/blocks.2/blocks.2.0/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 83959,
+        "differing_percent": 10.494875,
+        "max_abs_difference": 4.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "-4": 3,
+          "-3": 101,
+          "-2": 2235,
+          "-1": 37830,
+          "1": 41334,
+          "2": 2351,
+          "3": 100,
+          "4": 5
+        }
+      },
+      {
+        "node": "/blocks/blocks.2/blocks.2.3/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 101037,
+        "differing_percent": 12.629625,
+        "max_abs_difference": 4.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "-4": 1,
+          "-3": 66,
+          "-2": 1890,
+          "-1": 47239,
+          "1": 49704,
+          "2": 2054,
+          "3": 79,
+          "4": 4
+        }
+      },
+      {
+        "node": "/blocks/blocks.3/blocks.3.0/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 92229,
+        "differing_percent": 11.528625,
+        "max_abs_difference": 9.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "-6": 2,
+          "-5": 9,
+          "-4": 110,
+          "-3": 617,
+          "-2": 4498,
+          "-1": 40650,
+          "1": 40864,
+          "2": 4675,
+          "3": 676,
+          "4": 106,
+          "5": 17,
+          "6": 3,
+          "7": 1,
+          "9": 1
+        }
+      },
+      {
+        "node": "/blocks/blocks.3/blocks.3.3/Conv_quant",
+        "op": "QLinearConv",
+        "elements": 800000,
+        "differing_elements": 234265,
+        "differing_percent": 29.283125,
+        "max_abs_difference": 8.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "-8": 1,
+          "-6": 26,
+          "-5": 121,
+          "-4": 605,
+          "-3": 3870,
+          "-2": 21583,
+          "-1": 90047,
+          "1": 91408,
+          "2": 21967,
+          "3": 3931,
+          "4": 600,
+          "5": 84,
+          "6": 17,
+          "7": 4,
+          "8": 1
+        }
+      },
+      {
+        "node": "/blocks/blocks.3/blocks.3.5/Relu_output_0_DequantizeLinear",
+        "op": "DequantizeLinear",
+        "elements": 800000,
+        "differing_elements": 234265,
+        "differing_percent": 29.283125,
+        "max_abs_difference": 0.647123396396637,
+        "unit": "float value"
+      },
+      {
+        "node": "/ReduceMean",
+        "op": "ReduceMean",
+        "elements": 6400,
+        "differing_elements": 6299,
+        "differing_percent": 98.421875,
+        "max_abs_difference": 0.04529857635498047,
+        "unit": "float value"
+      },
+      {
+        "node": "/ReduceMean_output_0_QuantizeLinear",
+        "op": "QuantizeLinear",
+        "elements": 6400,
+        "differing_elements": 3090,
+        "differing_percent": 48.28125,
+        "max_abs_difference": 3.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "-3": 10,
+          "-2": 164,
+          "-1": 1315,
+          "1": 1413,
+          "2": 180,
+          "3": 8
+        }
+      },
+      {
+        "node": "/fc/Gemm_quant",
+        "op": "QGemm",
+        "elements": 1200,
+        "differing_elements": 289,
+        "differing_percent": 24.083333333333332,
+        "max_abs_difference": 1.0,
+        "unit": "LSB",
+        "difference_histogram": {
+          "-1": 155,
+          "1": 134
+        }
+      },
+      {
+        "node": "logits_DequantizeLinear",
+        "op": "DequantizeLinear",
+        "elements": 1200,
+        "differing_elements": 289,
+        "differing_percent": 24.083333333333332,
+        "max_abs_difference": 0.21873855590820312,
+        "unit": "float value"
+      }
+    ]
+  },
+  "wall_seconds_measured_on_host": 30.1
+}

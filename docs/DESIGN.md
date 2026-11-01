@@ -91,3 +91,16 @@ Each entry: the decision, the alternatives, and why.
 - **Ops:** exactly the ops found by `list_ops` in the two models (QuantizeLinear, DequantizeLinear, QLinearConv, QGemm, QLinearGlobalAveragePool, MaxPool, Flatten, ReduceMean), plus QLinearMatMul (the M1 kernel; 2-D only, constant B). QLinearAdd, QLinearAveragePool and Reshape are in the spec's "likely" list but appear in neither model, so they are not implemented; the importer reports them as unsupported if a model contains them.
 - **ReduceMean:** only a contiguous run of trailing axes (see MISMATCHES M-001).
 - **Not done:** `cli.py` (`python -m int8rt run|memreport`) is not part of the M2 definition of done; `run` needs nothing new and arrives with the planner in M4.
+
+## M3
+
+### D19. How full-model parity is measured
+- **Decision:** `tools/compare_ort.py` adds every node output to the ORT graph outputs (`make_empty_tensor_value_info`), runs ORT with graph optimisations disabled so nothing is fused away, runs int8rt with `dump_dir`, and compares the first output of every node as raw bytes (floats by bit pattern) in execution order. Every node is compared even after a divergence, so the report shows whether later nodes recover; the first divergence is reported with node, tensor, element index and both values.
+- **Inputs:** per-layer parity uses the first 100 test-set inputs in dataset order (CIFAR: 10,000-image test split; KWS: the 4,888 Project 2 test clips). Final logits are compared byte for byte on the whole test set as part of the accuracy pass.
+- **Alternatives:** compare only final logits (hides compensating errors); random inputs (not what the spec asks).
+- **Negative control:** `tests/test_compare_ort.py` plants a fault and checks it is reported at the right node, element and values.
+
+### D20. Two ways to measure Mode B deviation
+- **Isolated:** each node run in fixed mode on Mode A's input tensors. Only that node's requantiser differs, so this is the cleanest number for "how different is one fixed-point requantiser".
+- **Cumulative:** the whole network free-running in fixed mode. This is what a fixed-point accelerator would actually produce; earlier differences propagate and grow.
+- Mode A is bit-exact with ORT, so both are also deviations from ORT. D10 (single vs two-step rounding in Mode B) is unchanged and still open for the user.

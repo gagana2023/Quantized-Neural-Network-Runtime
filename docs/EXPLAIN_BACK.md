@@ -177,3 +177,40 @@ order of the multiplication was caught.
 5. **Why does the importer compute shapes itself rather than call ONNX shape inference?** ONNX does not know com.microsoft ops such as
    QGemm and QLinearGlobalAveragePool, so it cannot shape them. Writing the rules myself also means the single-op tests, which declare the
    output shape independently, check those rules.
+
+## M3 — Full-model parity
+
+**1. Tapping ORT's intermediates.** ORT only returns the graph outputs. To see every layer, add each node's output tensor to the list
+of graph outputs; ORT then returns all of them. Graph optimisation must be off, otherwise ORT may fuse nodes and the tensor between
+them no longer exists.
+*Example:* a graph A -> B -> C normally returns C. After tapping it returns A's, B's and C's outputs, so a bug in B shows up at B.
+
+**2. First divergent node.** Compare tensors in execution order and report the first that differs, with element index and both values.
+Errors propagate, so everything after the first difference is usually also wrong; the first one is the cause.
+*Example:* if conv2's output differs at element (0, 3, 5, 1) with ORT 17 and int8rt 18, conv2 is where to look.
+
+**3. Comparing floats by bytes.** `==` treats NaN as unequal to itself and -0.0 as equal to 0.0. Comparing the bit patterns (view as
+unsigned ints) is the exact "identical byte for byte" test.
+
+**4. Mode B deviation: isolated vs cumulative.** Isolated: feed each layer the *correct* inputs and see how much its fixed-point
+requantiser alone differs (here at most 1 LSB). Cumulative: let the fixed-point network run end to end; each layer starts from slightly
+wrong inputs, so differences grow (up to 9 LSB in KWS). Hardware sees the cumulative one.
+*Example:* a value that is exactly 2.5 after scaling: float mode rounds to 2 (half to even), gemmlowp fixed-point rounds to 3.
+
+**5. Why accuracy barely moves.** Most 1-LSB changes do not change which logit is largest. Here the predicted class changed on
+0.45% (CIFAR) and 0.37% (KWS) of inputs, and accuracy moved by 0.06 and 0.04 points. This is a measurement on two small models,
+not a general claim.
+
+### Likely interview questions
+
+1. **How do you prove bit-exactness on a whole model, not just single ops?** I tap every node output in ORT, dump every int8rt tensor,
+   and compare bytes layer by layer on 100 real inputs per model, plus final logits on every test input. 1100/1100 and 1500/1500 exact.
+2. **Why compare every layer if the logits already match?** Matching logits can hide errors that cancel or get saturated away, and
+   when they do not match, only the per-layer comparison tells you where. Accuracy equality is weaker than byte equality.
+3. **Fixed-point vs float requantisation: how big is the difference and when does it matter?** Per layer at most 1 LSB, in 0.04-0.27% of
+   conv outputs; cumulatively a few LSBs deeper in the network; 0.4-0.5% of predictions flip and accuracy drops 0.04-0.06 points. It
+   matters if you need to match a reference exactly (regression tests, certification) rather than just keep accuracy.
+4. **Why does global average pooling deviate most on CIFAR?** Its accumulator is divided by H*W, so many results can land exactly on
+   .5; float mode rounds half to even, gemmlowp rounds half up. That is my likely explanation, not something I isolated by experiment.
+5. **What are the limits of this evidence?** Per-layer parity is on 100 inputs per model, one ORT version (1.31.1), one CPU/OS; the
+   final logits are checked on whole test sets. Passing here says nothing about other ORT versions or CPUs with different SIMD paths.

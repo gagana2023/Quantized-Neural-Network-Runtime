@@ -39,3 +39,10 @@ All counts are from `results/ort_probe.json`; `QGemmSweep` feeds arbitrary INT32
   not tell the orders apart; the sweep was added for that reason. (DESIGN D8 is now verified.)
 - **QuantizeLinear** divides: `x / scale` gave 0 wrong out of 2,000,000; `x * (1 / scale)` gave 4.
 - **QLinearGlobalAveragePool**: `M = x_scale / (y_scale * H*W)`, accumulator `sum(x) - x_zp*H*W`; 30/30 cases bit-exact (DESIGN D15).
+
+## M3: full-model parity found no new mismatches
+
+Float mode matched ORT bit for bit on every node output of both models for all 100 inputs (CIFAR 1100/1100, KWS 1500/1500 tensor
+comparisons) and on the final logits of every test input (10,000 and 4,888). Nothing to log. This also exercised the M-001 alignment
+assumption (ReduceMean input buffer 16-byte aligned) inside the real KWS model on 4,888 clips: it held.
+Mode B differing from Mode A is expected behaviour of integer-only requantisation, not a mismatch; its size is in `results/parity_<model>.json`.
