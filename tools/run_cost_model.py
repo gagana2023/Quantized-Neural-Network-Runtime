@@ -5,6 +5,7 @@ Writes, for config ``<cfg>`` and model ``<m>``, into ``results/``:
   cost_<cfg>_<m>.json           environment, config, whole-network totals and sweep totals
   cost_<cfg>_<m>_sweeps.csv     per-layer rows at every sweep point
   cost_<cfg>_<m>_layers.md      the per-layer table (compute- vs transfer-bound) for docs/RESULTS.md
+  cost_<cfg>_<m>_summary.md     whole-network totals and sweep tables for docs/RESULTS.md
   cost_<cfg>_<m>.png            per-layer compute vs transfer cycles
   cost_<cfg>_<m>_sweeps.png     whole-network cycles vs SRAM size, bandwidth and array shape
 
@@ -196,6 +197,53 @@ def layers_markdown(rows: list[dict[str, Any]]) -> str:
     return head + "\n".join(lines) + "\n"
 
 
+def _both(t: dict[str, Any]) -> str:
+    return f"{t['total_cycles_double_buffered']} / {t['total_cycles_no_overlap']}"
+
+
+def summary_markdown(totals_: dict[str, dict[str, Any]], sweep_totals: list[dict[str, Any]]) -> str:
+    """Whole-network totals per scheme, then one table per sweep (DB / no-overlap cycles)."""
+    out = [
+        "| scheme | compute cycles | transfer cycles | no overlap | double buffered "
+        "| DMA stalls cut | utilisation (DB) | DRAM KiB | compute-bound / transfer-bound layers |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
+    ]
+    for name, t in totals_.items():
+        cells = [
+            name,
+            t["compute_cycles"],
+            t["transfer_cycles"],
+            t["total_cycles_no_overlap"],
+            t["total_cycles_double_buffered"],
+            f"{t['dma_stall_reduction_percent']}%",
+            f"{100 * t['utilisation_double_buffered']:.1f}%",
+            f"{t['dram_bytes'] / 1024:.1f}",
+            f"{t['compute_bound_layers']} / {t['transfer_bound_layers']}",
+        ]
+        out.append("| " + " | ".join(str(c) for c in cells) + " |")
+    for sweep in ("sram", "bandwidth", "array"):
+        out += ["", f"Sweep `{sweep}` (whole-network cycles, double buffered / no overlap):", ""]
+        out += [
+            "| point | WS | OS | WS DMA stalls cut | OS DMA stalls cut |",
+            "| --- | ---: | ---: | ---: | ---: |",
+        ]
+        pts: dict[str, dict[str, dict[str, Any]]] = {}
+        for t in sweep_totals:
+            if t["sweep"] == sweep and t["scheme"] in SCHEMES:
+                pts.setdefault(t["point"], {})[t["scheme"]] = t
+        for point, by in pts.items():
+            ws, os_ = by["weight_stationary"], by["output_stationary"]
+            cells = [
+                point,
+                _both(ws),
+                _both(os_),
+                f"{ws['dma_stall_reduction_percent']}%",
+                f"{os_['dma_stall_reduction_percent']}%",
+            ]
+            out.append("| " + " | ".join(cells) + " |")
+    return "\n".join(out) + "\n"
+
+
 def run(model: str, cfg_path: Path, out_dir: Path, command: str) -> dict[str, Any]:
     cfg: AccelConfig = load_config(cfg_path)
     graph = load_model(MODEL_PATHS[model])
@@ -208,6 +256,7 @@ def run(model: str, cfg_path: Path, out_dir: Path, command: str) -> dict[str, An
     write_csv(out_dir / f"{stem}.csv", rows)
     write_csv(out_dir / f"{stem}_sweeps.csv", sweep_layers)
     (out_dir / f"{stem}_layers.md").write_text(layers_markdown(rows))
+    (out_dir / f"{stem}_summary.md").write_text(summary_markdown(totals(costs, cfg), sweep_totals))
     plot_layers(
         rows, f"{model}: modelled compute vs transfer cycles ({cfg.name})", out_dir / f"{stem}.png"
     )
