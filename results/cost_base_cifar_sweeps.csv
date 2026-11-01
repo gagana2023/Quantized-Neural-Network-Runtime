@@ -1,0 +1,441 @@
+sweep,point,x,index,layer,op,kind,scheme,groups,gemm_m,gemm_k,gemm_n,tile_m,tile_n,tile_k,tiles,macs,vector_ops,dram_weight_bytes,dram_act_in_bytes,dram_act_out_bytes,dram_psum_bytes,dram_bytes,sram_read_bytes,sram_write_bytes,compute_cycles,transfer_cycles,total_cycles_no_overlap,total_cycles_double_buffered,stall_cycles_no_overlap,stall_cycles_double_buffered,util_no_overlap,util_double_buffered,bound,modelled_us_double_buffered
+sram,8+16 KiB,0.25,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,8+16 KiB,0.25,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,8+16 KiB,0.25,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,16,27,64,884736,0,992,3072,32768,0,36832,110592,32768,3456,4604,8060,4652,4604,1196,0.428784,0.742906,transfer,9.304
+sram,8+16 KiB,0.25,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,64,27,32,884736,0,15872,6144,32768,0,54784,110592,32768,3456,6848,10304,6870,6848,3414,0.335404,0.503057,transfer,13.74
+sram,8+16 KiB,0.25,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,32,128,192,9437184,0,9344,65664,32768,524288,632064,1179648,32768,36864,79056,115920,79390,79056,42526,0.318012,0.464341,transfer,158.78
+sram,8+16 KiB,0.25,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,64,32,288,9437184,0,149504,65664,32768,0,247936,1179648,32768,36864,31136,68000,39976,31136,3112,0.542118,0.922153,compute,79.952
+sram,8+16 KiB,0.25,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,40,0,32768,0,32768,8192,0,40960,32768,8192,2080,5160,7240,5186,5160,3106,,,transfer,10.372
+sram,8+16 KiB,0.25,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,40,0,32768,0,32768,8192,0,40960,32768,8192,2080,5160,7240,5186,5160,3106,,,transfer,10.372
+sram,8+16 KiB,0.25,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,16,128,192,4718592,0,18688,32832,16384,262144,330048,589824,16384,18432,41376,59808,41676,41376,23244,0.308186,0.442269,transfer,83.352
+sram,8+16 KiB,0.25,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,64,32,144,4718592,0,74752,32832,16384,0,123968,589824,16384,18432,15568,34000,20056,15568,1624,0.542118,0.919027,compute,40.112
+sram,8+16 KiB,0.25,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,16,128,320,9437184,0,37120,65664,16384,524288,643456,1179648,16384,36864,80608,117472,80940,80608,44076,0.313811,0.455448,transfer,161.88
+sram,8+16 KiB,0.25,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,64,64,144,9437184,0,148480,65664,16384,0,230528,1179648,16384,36864,28816,65680,38040,28816,1176,0.561267,0.969085,compute,76.08
+sram,8+16 KiB,0.25,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,48,0,16384,0,16384,4096,0,20480,16384,4096,1056,2592,3648,2603,2592,1547,,,transfer,5.206
+sram,8+16 KiB,0.25,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,48,0,16384,0,16384,4096,0,20480,16384,4096,1056,2592,3648,2603,2592,1547,,,transfer,5.206
+sram,8+16 KiB,0.25,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,8+16 KiB,0.25,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,8+16 KiB,0.25,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,8+16 KiB,0.25,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,8+16 KiB,0.25,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,105,169,132,105,68,0.014793,0.018939,transfer,0.264
+sram,8+16 KiB,0.25,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,0,754,704,10,64,95,159,103,95,39,0.015723,0.024272,transfer,0.206
+sram,8+16 KiB,0.25,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+sram,8+16 KiB,0.25,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+sram,16+32 KiB,0.5,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,16+32 KiB,0.5,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,16+32 KiB,0.5,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,16,27,64,884736,0,992,3072,32768,0,36832,110592,32768,3456,4604,8060,4652,4604,1196,0.428784,0.742906,transfer,9.304
+sram,16+32 KiB,0.5,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,128,27,16,884736,0,7936,6144,32768,0,46848,110592,32768,3456,5856,9312,5962,5856,2506,0.371134,0.579671,transfer,11.924
+sram,16+32 KiB,0.5,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,64,288,32,9437184,0,9344,65536,32768,0,107648,1179648,32768,36864,13456,50320,37832,13456,968,0.732591,0.974413,compute,75.664
+sram,16+32 KiB,0.5,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,128,64,80,9437184,0,74752,65600,32768,0,173120,1179648,32768,36864,21648,58512,37370,21648,506,0.630025,0.98646,compute,74.74
+sram,16+32 KiB,0.5,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,24,0,32768,0,32768,8192,0,40960,32768,8192,2064,5136,7200,5179,5136,3115,,,transfer,10.358
+sram,16+32 KiB,0.5,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,24,0,32768,0,32768,8192,0,40960,32768,8192,2064,5136,7200,5179,5136,3115,,,transfer,10.358
+sram,16+32 KiB,0.5,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,64,288,16,4718592,0,18688,32768,16384,0,67840,589824,16384,18432,8480,26912,19400,8480,968,0.684899,0.950103,compute,38.8
+sram,16+32 KiB,0.5,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,128,64,40,4718592,0,37376,32800,16384,0,86560,589824,16384,18432,10824,29256,18938,10824,506,0.630025,0.973281,compute,37.876
+sram,16+32 KiB,0.5,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,16,256,192,9437184,0,37120,65664,16384,262144,381312,1179648,16384,36864,47712,84576,52420,47712,15556,0.435868,0.703243,transfer,104.84
+sram,16+32 KiB,0.5,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,128,64,72,9437184,0,74240,65592,16384,0,156216,1179648,16384,36864,19536,56400,37370,19536,506,0.653617,0.98646,compute,74.74
+sram,16+32 KiB,0.5,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2564,2560,1540,,,transfer,5.128
+sram,16+32 KiB,0.5,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2564,2560,1540,,,transfer,5.128
+sram,16+32 KiB,0.5,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,16+32 KiB,0.5,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,16+32 KiB,0.5,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,16+32 KiB,0.5,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,16+32 KiB,0.5,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,105,169,132,105,68,0.014793,0.018939,transfer,0.264
+sram,16+32 KiB,0.5,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,0,754,704,10,64,95,159,103,95,39,0.015723,0.024272,transfer,0.206
+sram,16+32 KiB,0.5,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+sram,16+32 KiB,0.5,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+sram,32+64 KiB,1.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,32+64 KiB,1.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,32+64 KiB,1.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,16,27,64,884736,0,992,3072,32768,0,36832,110592,32768,3456,4604,8060,4652,4604,1196,0.428784,0.742906,transfer,9.304
+sram,32+64 KiB,1.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,256,27,8,884736,0,3968,6144,32768,0,42880,110592,32768,3456,5360,8816,5634,5360,2178,0.392015,0.613419,transfer,11.268
+sram,32+64 KiB,1.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,64,288,32,9437184,0,9344,65536,32768,0,107648,1179648,32768,36864,13456,50320,37832,13456,968,0.732591,0.974413,compute,75.664
+sram,32+64 KiB,1.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,128,64,80,9437184,0,74752,65600,32768,0,173120,1179648,32768,36864,21648,58512,37370,21648,506,0.630025,0.98646,compute,74.74
+sram,32+64 KiB,1.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+sram,32+64 KiB,1.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+sram,32+64 KiB,1.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,64,288,16,4718592,0,18688,32768,16384,0,67840,589824,16384,18432,8480,26912,19400,8480,968,0.684899,0.950103,compute,38.8
+sram,32+64 KiB,1.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,128,64,40,4718592,0,37376,32800,16384,0,86560,589824,16384,18432,10824,29256,18938,10824,506,0.630025,0.973281,compute,37.876
+sram,32+64 KiB,1.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,64,576,16,9437184,0,37120,65536,16384,0,119040,1179648,16384,36864,14880,51744,38664,14880,1800,0.71243,0.953445,compute,77.328
+sram,32+64 KiB,1.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,128,64,72,9437184,0,74240,65592,16384,0,156216,1179648,16384,36864,19536,56400,37370,19536,506,0.653617,0.98646,compute,74.74
+sram,32+64 KiB,1.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+sram,32+64 KiB,1.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+sram,32+64 KiB,1.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,32+64 KiB,1.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,32+64 KiB,1.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,32+64 KiB,1.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,32+64 KiB,1.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,105,169,132,105,68,0.014793,0.018939,transfer,0.264
+sram,32+64 KiB,1.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,0,754,704,10,64,95,159,103,95,39,0.015723,0.024272,transfer,0.206
+sram,32+64 KiB,1.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+sram,32+64 KiB,1.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+sram,64+128 KiB,2.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,64+128 KiB,2.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,64+128 KiB,2.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,16,27,64,884736,0,992,3072,32768,0,36832,110592,32768,3456,4604,8060,4652,4604,1196,0.428784,0.742906,transfer,9.304
+sram,64+128 KiB,2.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,32,256,27,4,884736,0,3968,3072,32768,0,39808,110592,32768,3456,4976,8432,5620,4976,2164,0.409867,0.614947,transfer,11.24
+sram,64+128 KiB,2.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,64,288,32,9437184,0,9344,65536,32768,0,107648,1179648,32768,36864,13456,50320,37832,13456,968,0.732591,0.974413,compute,75.664
+sram,64+128 KiB,2.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,128,64,80,9437184,0,74752,65600,32768,0,173120,1179648,32768,36864,21648,58512,37370,21648,506,0.630025,0.98646,compute,74.74
+sram,64+128 KiB,2.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5136,5120,3088,,,transfer,10.272
+sram,64+128 KiB,2.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5136,5120,3088,,,transfer,10.272
+sram,64+128 KiB,2.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,64,288,16,4718592,0,18688,32768,16384,0,67840,589824,16384,18432,8480,26912,19400,8480,968,0.684899,0.950103,compute,38.8
+sram,64+128 KiB,2.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,128,64,40,4718592,0,37376,32800,16384,0,86560,589824,16384,18432,10824,29256,18938,10824,506,0.630025,0.973281,compute,37.876
+sram,64+128 KiB,2.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,64,576,16,9437184,0,37120,65536,16384,0,119040,1179648,16384,36864,14880,51744,38664,14880,1800,0.71243,0.953445,compute,77.328
+sram,64+128 KiB,2.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,128,64,72,9437184,0,74240,65592,16384,0,156216,1179648,16384,36864,19536,56400,37370,19536,506,0.653617,0.98646,compute,74.74
+sram,64+128 KiB,2.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+sram,64+128 KiB,2.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+sram,64+128 KiB,2.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,64+128 KiB,2.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,64+128 KiB,2.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,64+128 KiB,2.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,64+128 KiB,2.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,105,169,132,105,68,0.014793,0.018939,transfer,0.264
+sram,64+128 KiB,2.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,0,754,704,10,64,95,159,103,95,39,0.015723,0.024272,transfer,0.206
+sram,64+128 KiB,2.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+sram,64+128 KiB,2.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+sram,128+256 KiB,4.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,128+256 KiB,4.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,128+256 KiB,4.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,16,27,64,884736,0,992,3072,32768,0,36832,110592,32768,3456,4604,8060,4652,4604,1196,0.428784,0.742906,transfer,9.304
+sram,128+256 KiB,4.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,32,256,27,4,884736,0,3968,3072,32768,0,39808,110592,32768,3456,4976,8432,5620,4976,2164,0.409867,0.614947,transfer,11.24
+sram,128+256 KiB,4.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,64,288,32,9437184,0,9344,65536,32768,0,107648,1179648,32768,36864,13456,50320,37832,13456,968,0.732591,0.974413,compute,75.664
+sram,128+256 KiB,4.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,128,64,80,9437184,0,74752,65600,32768,0,173120,1179648,32768,36864,21648,58512,37370,21648,506,0.630025,0.98646,compute,74.74
+sram,128+256 KiB,4.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5136,5120,3088,,,transfer,10.272
+sram,128+256 KiB,4.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5136,5120,3088,,,transfer,10.272
+sram,128+256 KiB,4.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,64,288,16,4718592,0,18688,32768,16384,0,67840,589824,16384,18432,8480,26912,19400,8480,968,0.684899,0.950103,compute,38.8
+sram,128+256 KiB,4.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,128,64,40,4718592,0,37376,32800,16384,0,86560,589824,16384,18432,10824,29256,18938,10824,506,0.630025,0.973281,compute,37.876
+sram,128+256 KiB,4.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,64,576,16,9437184,0,37120,65536,16384,0,119040,1179648,16384,36864,14880,51744,38664,14880,1800,0.71243,0.953445,compute,77.328
+sram,128+256 KiB,4.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,128,64,72,9437184,0,74240,65592,16384,0,156216,1179648,16384,36864,19536,56400,37370,19536,506,0.653617,0.98646,compute,74.74
+sram,128+256 KiB,4.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+sram,128+256 KiB,4.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+sram,128+256 KiB,4.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,128+256 KiB,4.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,128+256 KiB,4.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,128+256 KiB,4.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,128+256 KiB,4.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,105,169,132,105,68,0.014793,0.018939,transfer,0.264
+sram,128+256 KiB,4.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,0,754,704,10,64,95,159,103,95,39,0.015723,0.024272,transfer,0.206
+sram,128+256 KiB,4.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+sram,128+256 KiB,4.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+sram,256+512 KiB,8.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,256+512 KiB,8.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+sram,256+512 KiB,8.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,16,27,64,884736,0,992,3072,32768,0,36832,110592,32768,3456,4604,8060,4652,4604,1196,0.428784,0.742906,transfer,9.304
+sram,256+512 KiB,8.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,32,256,27,4,884736,0,3968,3072,32768,0,39808,110592,32768,3456,4976,8432,5620,4976,2164,0.409867,0.614947,transfer,11.24
+sram,256+512 KiB,8.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,64,288,32,9437184,0,9344,65536,32768,0,107648,1179648,32768,36864,13456,50320,37832,13456,968,0.732591,0.974413,compute,75.664
+sram,256+512 KiB,8.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,128,64,80,9437184,0,74752,65600,32768,0,173120,1179648,32768,36864,21648,58512,37370,21648,506,0.630025,0.98646,compute,74.74
+sram,256+512 KiB,8.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5136,5120,3088,,,transfer,10.272
+sram,256+512 KiB,8.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5136,5120,3088,,,transfer,10.272
+sram,256+512 KiB,8.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,64,288,16,4718592,0,18688,32768,16384,0,67840,589824,16384,18432,8480,26912,19400,8480,968,0.684899,0.950103,compute,38.8
+sram,256+512 KiB,8.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,128,64,40,4718592,0,37376,32800,16384,0,86560,589824,16384,18432,10824,29256,18938,10824,506,0.630025,0.973281,compute,37.876
+sram,256+512 KiB,8.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,64,576,16,9437184,0,37120,65536,16384,0,119040,1179648,16384,36864,14880,51744,38664,14880,1800,0.71243,0.953445,compute,77.328
+sram,256+512 KiB,8.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,128,64,72,9437184,0,74240,65592,16384,0,156216,1179648,16384,36864,19536,56400,37370,19536,506,0.653617,0.98646,compute,74.74
+sram,256+512 KiB,8.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+sram,256+512 KiB,8.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+sram,256+512 KiB,8.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,256+512 KiB,8.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+sram,256+512 KiB,8.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,256+512 KiB,8.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+sram,256+512 KiB,8.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,105,169,132,105,68,0.014793,0.018939,transfer,0.264
+sram,256+512 KiB,8.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,0,754,704,10,64,95,159,103,95,39,0.015723,0.024272,transfer,0.206
+sram,256+512 KiB,8.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+sram,256+512 KiB,8.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+bandwidth,1 B/cycle,1.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,15360,15552,15360,15360,15168,,,transfer,30.72
+bandwidth,1 B/cycle,1.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,15360,15552,15360,15360,15168,,,transfer,30.72
+bandwidth,1 B/cycle,1.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,16,27,64,884736,0,992,3072,32768,0,36832,110592,32768,3456,36832,40288,36838,36832,33382,0.085782,0.093816,transfer,73.676
+bandwidth,1 B/cycle,1.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,256,27,8,884736,0,3968,6144,32768,0,42880,110592,32768,3456,42880,46336,42880,42880,39424,0.074586,0.080597,transfer,85.76
+bandwidth,1 B/cycle,1.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,32,16,288,64,9437184,0,9344,32768,32768,0,74880,1179648,32768,36864,74880,111744,75008,74880,38144,0.329897,0.491468,transfer,150.016
+bandwidth,1 B/cycle,1.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,256,2,1152,9437184,0,37376,65664,32768,0,135808,1179648,32768,36864,135808,172672,135840,135808,98976,0.213491,0.271378,transfer,271.68
+bandwidth,1 B/cycle,1.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,2,0,32768,0,32768,8192,0,40960,32768,8192,2048,40960,43008,40960,40960,38912,,,transfer,81.92
+bandwidth,1 B/cycle,1.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,2,0,32768,0,32768,8192,0,40960,32768,8192,2048,40960,43008,40960,40960,38912,,,transfer,81.92
+bandwidth,1 B/cycle,1.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,32,16,288,32,4718592,0,18688,16384,16384,0,51456,589824,16384,18432,51456,69888,51584,51456,33152,0.263736,0.35732,transfer,103.168
+bandwidth,1 B/cycle,1.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,256,2,576,4718592,0,18688,32832,16384,0,67904,589824,16384,18432,67904,86336,67936,67904,49504,0.213491,0.271314,transfer,135.872
+bandwidth,1 B/cycle,1.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,16,576,64,9437184,0,37120,65536,16384,0,119040,1179648,16384,36864,119040,155904,119360,119040,82496,0.236453,0.308847,transfer,238.72
+bandwidth,1 B/cycle,1.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,256,2,1152,9437184,0,37120,65664,16384,0,119168,1179648,16384,36864,119168,156032,119200,119168,82336,0.236259,0.309262,transfer,238.4
+bandwidth,1 B/cycle,1.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,2,0,16384,0,16384,4096,0,20480,16384,4096,1024,20480,21504,20480,20480,19456,,,transfer,40.96
+bandwidth,1 B/cycle,1.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,2,0,16384,0,16384,4096,0,20480,16384,4096,1024,20480,21504,20480,20480,19456,,,transfer,40.96
+bandwidth,1 B/cycle,1.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,64,0,4160,0,4096,64,0,4160,4096,64,320,4160,4480,4164,4160,3844,,,transfer,8.328
+bandwidth,1 B/cycle,1.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,64,0,4160,0,4096,64,0,4160,4096,64,320,4160,4480,4164,4160,3844,,,transfer,8.328
+bandwidth,1 B/cycle,1.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,1 B/cycle,1.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,1 B/cycle,1.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,64,1,640,0,680,64,10,0,754,704,10,64,754,818,818,754,754,0.003056,0.003056,transfer,1.636
+bandwidth,1 B/cycle,1.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,1,64,640,0,680,64,10,0,754,704,10,64,754,818,755,754,691,0.003056,0.003311,transfer,1.51
+bandwidth,1 B/cycle,1.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,2,0,10,0,10,40,0,50,10,40,2,50,52,50,50,48,,,transfer,0.1
+bandwidth,1 B/cycle,1.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,2,0,10,0,10,40,0,50,10,40,2,50,52,50,50,48,,,transfer,0.1
+bandwidth,2 B/cycle,2.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,7680,7872,7680,7680,7488,,,transfer,15.36
+bandwidth,2 B/cycle,2.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,7680,7872,7680,7680,7488,,,transfer,15.36
+bandwidth,2 B/cycle,2.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,16,27,64,884736,0,992,3072,32768,0,36832,110592,32768,3456,18416,21872,18446,18416,14990,0.15801,0.187358,transfer,36.892
+bandwidth,2 B/cycle,2.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,256,27,8,884736,0,3968,6144,32768,0,42880,110592,32768,3456,21440,24896,21440,21440,17984,0.138817,0.161194,transfer,42.88
+bandwidth,2 B/cycle,2.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,32,16,288,64,9437184,0,9344,32768,32768,0,74880,1179648,32768,36864,37440,74304,42048,37440,5184,0.496124,0.876712,transfer,84.096
+bandwidth,2 B/cycle,2.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,256,4,576,9437184,0,37376,65664,32768,0,135808,1179648,32768,36864,67904,104768,67968,67904,31104,0.351863,0.542373,transfer,135.936
+bandwidth,2 B/cycle,2.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,2,0,32768,0,32768,8192,0,40960,32768,8192,2048,20480,22528,20480,20480,18432,,,transfer,40.96
+bandwidth,2 B/cycle,2.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,2,0,32768,0,32768,8192,0,40960,32768,8192,2048,20480,22528,20480,20480,18432,,,transfer,40.96
+bandwidth,2 B/cycle,2.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,32,16,288,32,4718592,0,18688,16384,16384,0,51456,589824,16384,18432,25728,44160,28224,25728,9792,0.417391,0.653061,transfer,56.448
+bandwidth,2 B/cycle,2.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,256,4,288,4718592,0,18688,32832,16384,0,67904,589824,16384,18432,33952,52384,34016,33952,15584,0.351863,0.541863,transfer,68.032
+bandwidth,2 B/cycle,2.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,16,576,64,9437184,0,37120,65536,16384,0,119040,1179648,16384,36864,59520,96384,60032,59520,23168,0.38247,0.614072,transfer,120.064
+bandwidth,2 B/cycle,2.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,256,4,576,9437184,0,37120,65664,16384,0,119168,1179648,16384,36864,59584,96448,59648,59584,22784,0.382216,0.618026,transfer,119.296
+bandwidth,2 B/cycle,2.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,2,0,16384,0,16384,4096,0,20480,16384,4096,1024,10240,11264,10240,10240,9216,,,transfer,20.48
+bandwidth,2 B/cycle,2.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,2,0,16384,0,16384,4096,0,20480,16384,4096,1024,10240,11264,10240,10240,9216,,,transfer,20.48
+bandwidth,2 B/cycle,2.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,32,0,4160,0,4096,64,0,4160,4096,64,288,2080,2368,2088,2080,1800,,,transfer,4.176
+bandwidth,2 B/cycle,2.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,32,0,4160,0,4096,64,0,4160,4096,64,288,2080,2368,2088,2080,1800,,,transfer,4.176
+bandwidth,2 B/cycle,2.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,2 B/cycle,2.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,2 B/cycle,2.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,417,481,429,417,365,0.005198,0.005828,transfer,0.858
+bandwidth,2 B/cycle,2.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,2,32,640,0,680,64,10,0,754,704,10,64,377,441,379,377,315,0.005669,0.006596,transfer,0.758
+bandwidth,2 B/cycle,2.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,25,26,26,25,25,,,transfer,0.052
+bandwidth,2 B/cycle,2.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,25,26,26,25,25,,,transfer,0.052
+bandwidth,4 B/cycle,4.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,3840,4032,3840,3840,3648,,,transfer,7.68
+bandwidth,4 B/cycle,4.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,3840,4032,3840,3840,3648,,,transfer,7.68
+bandwidth,4 B/cycle,4.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,16,27,64,884736,0,992,3072,32768,0,36832,110592,32768,3456,9208,12664,9250,9208,5794,0.2729,0.373622,transfer,18.5
+bandwidth,4 B/cycle,4.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,256,27,8,884736,0,3968,6144,32768,0,42880,110592,32768,3456,10720,14176,10836,10720,7380,0.243792,0.318937,transfer,21.672
+bandwidth,4 B/cycle,4.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,16,288,128,9437184,0,9344,65536,32768,0,107648,1179648,32768,36864,26912,63776,39296,26912,2432,0.578023,0.938111,compute,78.592
+bandwidth,4 B/cycle,4.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,256,288,8,9437184,0,37376,65536,32768,0,135680,1179648,32768,36864,33920,70784,41104,33920,4240,0.520796,0.896847,compute,82.208
+bandwidth,4 B/cycle,4.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,2,0,32768,0,32768,8192,0,40960,32768,8192,2048,10240,12288,10240,10240,8192,,,transfer,20.48
+bandwidth,4 B/cycle,4.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,2,0,32768,0,32768,8192,0,40960,32768,8192,2048,10240,12288,10240,10240,8192,,,transfer,20.48
+bandwidth,4 B/cycle,4.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,128,288,8,4718592,0,18688,32768,16384,0,67840,589824,16384,18432,16960,35392,22336,16960,3904,0.520796,0.825215,compute,44.672
+bandwidth,4 B/cycle,4.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,256,32,36,4718592,0,18688,32796,16384,0,67868,589824,16384,18432,16976,35408,22432,16976,4000,0.52056,0.821683,compute,44.864
+bandwidth,4 B/cycle,4.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,128,576,8,9437184,0,37120,65536,16384,0,119040,1179648,16384,36864,29760,66624,42560,29760,5696,0.553314,0.866165,compute,85.12
+bandwidth,4 B/cycle,4.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,256,64,36,9437184,0,37120,65556,16384,0,119060,1179648,16384,36864,29792,66656,40752,29792,3888,0.553048,0.904594,compute,81.504
+bandwidth,4 B/cycle,4.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,2,0,16384,0,16384,4096,0,20480,16384,4096,1024,5120,6144,5120,5120,4096,,,transfer,10.24
+bandwidth,4 B/cycle,4.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,2,0,16384,0,16384,4096,0,20480,16384,4096,1024,5120,6144,5120,5120,4096,,,transfer,10.24
+bandwidth,4 B/cycle,4.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,1040,1312,1056,1040,784,,,transfer,2.112
+bandwidth,4 B/cycle,4.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,1040,1312,1056,1040,784,,,transfer,2.112
+bandwidth,4 B/cycle,4.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,4 B/cycle,4.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,4 B/cycle,4.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,209,273,231,209,167,0.009158,0.010823,transfer,0.462
+bandwidth,4 B/cycle,4.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,4,16,640,0,680,64,10,0,754,704,10,64,189,253,193,189,129,0.009881,0.012953,transfer,0.386
+bandwidth,4 B/cycle,4.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,13,14,14,13,13,,,transfer,0.028
+bandwidth,4 B/cycle,4.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,13,14,14,13,13,,,transfer,0.028
+bandwidth,8 B/cycle,8.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+bandwidth,8 B/cycle,8.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+bandwidth,8 B/cycle,8.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,16,27,64,884736,0,992,3072,32768,0,36832,110592,32768,3456,4604,8060,4652,4604,1196,0.428784,0.742906,transfer,9.304
+bandwidth,8 B/cycle,8.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,256,27,8,884736,0,3968,6144,32768,0,42880,110592,32768,3456,5360,8816,5634,5360,2178,0.392015,0.613419,transfer,11.268
+bandwidth,8 B/cycle,8.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,64,288,32,9437184,0,9344,65536,32768,0,107648,1179648,32768,36864,13456,50320,37832,13456,968,0.732591,0.974413,compute,75.664
+bandwidth,8 B/cycle,8.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,128,64,80,9437184,0,74752,65600,32768,0,173120,1179648,32768,36864,21648,58512,37370,21648,506,0.630025,0.98646,compute,74.74
+bandwidth,8 B/cycle,8.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+bandwidth,8 B/cycle,8.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+bandwidth,8 B/cycle,8.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,64,288,16,4718592,0,18688,32768,16384,0,67840,589824,16384,18432,8480,26912,19400,8480,968,0.684899,0.950103,compute,38.8
+bandwidth,8 B/cycle,8.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,128,64,40,4718592,0,37376,32800,16384,0,86560,589824,16384,18432,10824,29256,18938,10824,506,0.630025,0.973281,compute,37.876
+bandwidth,8 B/cycle,8.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,64,576,16,9437184,0,37120,65536,16384,0,119040,1179648,16384,36864,14880,51744,38664,14880,1800,0.71243,0.953445,compute,77.328
+bandwidth,8 B/cycle,8.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,128,64,72,9437184,0,74240,65592,16384,0,156216,1179648,16384,36864,19536,56400,37370,19536,506,0.653617,0.98646,compute,74.74
+bandwidth,8 B/cycle,8.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+bandwidth,8 B/cycle,8.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+bandwidth,8 B/cycle,8.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+bandwidth,8 B/cycle,8.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+bandwidth,8 B/cycle,8.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,8 B/cycle,8.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,8 B/cycle,8.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,105,169,132,105,68,0.014793,0.018939,transfer,0.264
+bandwidth,8 B/cycle,8.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,0,754,704,10,64,95,159,103,95,39,0.015723,0.024272,transfer,0.206
+bandwidth,8 B/cycle,8.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+bandwidth,8 B/cycle,8.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+bandwidth,16 B/cycle,16.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,960,1152,960,960,768,,,transfer,1.92
+bandwidth,16 B/cycle,16.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,960,1152,960,960,768,,,transfer,1.92
+bandwidth,16 B/cycle,16.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,16,16,27,128,884736,0,992,6144,32768,0,39904,110592,32768,3456,2494,5950,3529,2494,73,0.58084,0.979314,compute,7.058
+bandwidth,16 B/cycle,16.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,64,27,32,884736,0,15872,6144,32768,0,54784,110592,32768,3456,3424,6880,3563,3424,107,0.502326,0.969969,compute,7.126
+bandwidth,16 B/cycle,16.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,32,288,64,9437184,0,9344,65536,32768,0,107648,1179648,32768,36864,6728,43592,37252,6728,388,0.84566,0.989584,compute,74.504
+bandwidth,16 B/cycle,16.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,64,32,288,9437184,0,149504,65664,32768,0,247936,1179648,32768,36864,15712,52576,36979,15712,115,0.701156,0.99689,compute,73.958
+bandwidth,16 B/cycle,16.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,2560,4608,2572,2560,524,,,transfer,5.144
+bandwidth,16 B/cycle,16.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,2560,4608,2572,2560,524,,,transfer,5.144
+bandwidth,16 B/cycle,16.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,32,288,32,4718592,0,18688,32768,16384,0,67840,589824,16384,18432,4240,22672,18820,4240,388,0.812985,0.979384,compute,37.64
+bandwidth,16 B/cycle,16.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,64,32,144,4718592,0,74752,32832,16384,0,123968,589824,16384,18432,7856,26288,18547,7856,115,0.701156,0.9938,compute,37.094
+bandwidth,16 B/cycle,16.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,32,576,32,9437184,0,37120,65536,16384,0,119040,1179648,16384,36864,7440,44304,37604,7440,740,0.832069,0.980321,compute,75.208
+bandwidth,16 B/cycle,16.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,64,32,288,9437184,0,148480,65664,16384,0,230528,1179648,16384,36864,14624,51488,36979,14624,115,0.715973,0.99689,compute,73.958
+bandwidth,16 B/cycle,16.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,1280,2304,1292,1280,268,,,transfer,2.584
+bandwidth,16 B/cycle,16.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,1280,2304,1292,1280,268,,,transfer,2.584
+bandwidth,16 B/cycle,16.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,272,544,289,272,17,,,compute,0.578
+bandwidth,16 B/cycle,16.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,272,544,289,272,17,,,compute,0.578
+bandwidth,16 B/cycle,16.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,16 B/cycle,16.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,16 B/cycle,16.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,16,4,640,0,680,64,10,240,994,704,10,64,66,130,81,66,17,0.019231,0.030864,transfer,0.162
+bandwidth,16 B/cycle,16.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,2,32,640,0,680,64,10,0,754,704,10,64,67,131,69,67,5,0.019084,0.036232,transfer,0.138
+bandwidth,16 B/cycle,16.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,4,5,5,4,4,,,transfer,0.01
+bandwidth,16 B/cycle,16.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,4,5,5,4,4,,,transfer,0.01
+bandwidth,32 B/cycle,32.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,32,0,3072,0,12288,3072,0,15360,12288,3072,192,480,672,483,480,291,,,transfer,0.966
+bandwidth,32 B/cycle,32.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,32,0,3072,0,12288,3072,0,15360,12288,3072,192,480,672,483,480,291,,,transfer,0.966
+bandwidth,32 B/cycle,32.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,16,16,27,128,884736,0,992,6144,32768,0,39904,110592,32768,3456,1310,4766,3481,1310,25,0.725136,0.992818,compute,6.962
+bandwidth,32 B/cycle,32.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,16,16,256,884736,0,63488,6272,32768,0,102528,110592,32768,3456,3328,6784,3475,3328,19,0.509434,0.994532,compute,6.95
+bandwidth,32 B/cycle,32.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,16,288,128,9437184,0,9344,65536,32768,0,107648,1179648,32768,36864,3364,40228,37034,3364,170,0.916377,0.99541,compute,74.068
+bandwidth,32 B/cycle,32.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,32,16,1152,9437184,0,299008,65664,32768,0,397440,1179648,32768,36864,12672,49536,36892,12672,28,0.744186,0.999241,compute,73.784
+bandwidth,32 B/cycle,32.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,1280,3328,2058,1280,10,,,compute,4.116
+bandwidth,32 B/cycle,32.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,1280,3328,2058,1280,10,,,compute,4.116
+bandwidth,32 B/cycle,32.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,16,288,64,4718592,0,18688,32768,16384,0,67840,589824,16384,18432,2120,20552,18602,2120,170,0.896847,0.990861,compute,37.204
+bandwidth,32 B/cycle,32.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,32,16,576,4718592,0,149504,32832,16384,0,198720,589824,16384,18432,6336,24768,18460,6336,28,0.744186,0.998483,compute,36.92
+bandwidth,32 B/cycle,32.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,32,128,160,9437184,0,37120,65664,16384,524288,643456,1179648,16384,36864,20232,57096,36993,20232,129,0.645649,0.996513,compute,73.986
+bandwidth,32 B/cycle,32.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,32,16,1152,9437184,0,296960,65664,16384,0,379008,1179648,16384,36864,12096,48960,36892,12096,28,0.752941,0.999241,compute,73.784
+bandwidth,32 B/cycle,32.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,640,1664,1034,640,10,,,compute,2.068
+bandwidth,32 B/cycle,32.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,640,1664,1034,640,10,,,compute,2.068
+bandwidth,32 B/cycle,32.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,8,0,4160,0,4096,64,0,4160,4096,64,264,136,400,281,136,17,,,compute,0.562
+bandwidth,32 B/cycle,32.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,8,0,4160,0,4096,64,0,4160,4096,64,264,136,400,281,136,17,,,compute,0.562
+bandwidth,32 B/cycle,32.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,32 B/cycle,32.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,32 B/cycle,32.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,560,1314,704,10,64,47,111,69,47,5,0.022523,0.036232,compute,0.138
+bandwidth,32 B/cycle,32.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,2,32,640,0,680,64,10,0,754,704,10,64,34,98,67,34,3,0.02551,0.037313,compute,0.134
+bandwidth,32 B/cycle,32.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,3,4,4,3,3,,,transfer,0.008
+bandwidth,32 B/cycle,32.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,3,4,4,3,3,,,transfer,0.008
+bandwidth,64 B/cycle,64.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,16,0,3072,0,12288,3072,0,15360,12288,3072,192,240,432,249,240,57,,,transfer,0.498
+bandwidth,64 B/cycle,64.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,16,0,3072,0,12288,3072,0,15360,12288,3072,192,240,432,249,240,57,,,transfer,0.498
+bandwidth,64 B/cycle,64.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,16,16,27,128,884736,0,992,6144,32768,0,39904,110592,32768,3456,656,4112,3469,656,13,0.840467,0.996253,compute,6.938
+bandwidth,64 B/cycle,64.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,16,16,256,884736,0,63488,6272,32768,0,102528,110592,32768,3456,1792,5248,3466,1792,10,0.658537,0.997115,compute,6.932
+bandwidth,64 B/cycle,64.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,16,64,640,9437184,0,9344,65664,32768,1048576,1156352,1179648,32768,36864,18194,55058,36889,18194,25,0.669548,0.999322,compute,73.778
+bandwidth,64 B/cycle,64.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,16,8,4608,9437184,0,598016,69120,32768,0,699904,1179648,32768,36864,14464,51328,36872,14464,8,0.718204,0.999783,compute,73.744
+bandwidth,64 B/cycle,64.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,640,2688,2053,640,5,,,compute,4.106
+bandwidth,64 B/cycle,64.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,640,2688,2053,640,5,,,compute,4.106
+bandwidth,64 B/cycle,64.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,16,64,320,4718592,0,18688,32832,16384,524288,592192,589824,16384,18432,9316,27748,18459,9316,27,0.664264,0.998537,compute,36.918
+bandwidth,64 B/cycle,64.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,16,8,2304,4718592,0,299008,34560,16384,0,349952,589824,16384,18432,7232,25664,18440,7232,8,0.718204,0.999566,compute,36.88
+bandwidth,64 B/cycle,64.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,16,64,576,9437184,0,37120,65664,16384,1048576,1167744,1179648,16384,36864,18372,55236,36887,18372,23,0.667391,0.999376,compute,73.774
+bandwidth,64 B/cycle,64.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,16,8,4608,9437184,0,593920,69120,16384,0,679424,1179648,16384,36864,14144,51008,36872,14144,8,0.72271,0.999783,compute,73.744
+bandwidth,64 B/cycle,64.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,320,1344,1029,320,5,,,compute,2.058
+bandwidth,64 B/cycle,64.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,320,1344,1029,320,5,,,compute,2.058
+bandwidth,64 B/cycle,64.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,8,0,4160,0,4096,64,0,4160,4096,64,264,72,336,273,72,9,,,compute,0.546
+bandwidth,64 B/cycle,64.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,8,0,4160,0,4096,64,0,4160,4096,64,264,72,336,273,72,9,,,compute,0.546
+bandwidth,64 B/cycle,64.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,64 B/cycle,64.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+bandwidth,64 B/cycle,64.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,2,32,640,0,680,64,10,2480,3234,704,10,64,64,128,66,64,2,0.019531,0.037879,compute,0.132
+bandwidth,64 B/cycle,64.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,2,32,640,0,680,64,10,0,754,704,10,64,33,97,66,33,2,0.025773,0.037879,compute,0.132
+bandwidth,64 B/cycle,64.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,2,3,3,2,2,,,transfer,0.006
+bandwidth,64 B/cycle,64.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,2,3,3,2,2,,,transfer,0.006
+array,4x4,16.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,4x4,16.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,4x4,16.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,4,4,27,2048,884736,0,992,24576,32768,0,58336,442368,32768,55296,8312,63608,55315,8312,19,0.869325,0.999657,compute,110.63
+array,4x4,16.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,4,8,4,7168,884736,0,126976,27648,32768,0,187392,442368,32768,55296,26624,81920,55305,26624,9,0.675,0.999837,compute,110.61
+array,4x4,16.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,4,8,32,9216,9437184,0,9344,267264,32768,2097152,2406528,4718592,32768,589824,304272,894096,589850,304272,26,0.659688,0.999956,compute,1179.7
+array,4x4,16.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,4,8,4,73728,9437184,0,1196032,294912,32768,0,1523712,4718592,32768,589824,227328,817152,589833,227328,9,0.721805,0.999985,compute,1179.666
+array,4x4,16.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,4x4,16.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,4x4,16.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,4,8,32,4608,4718592,0,18688,133632,16384,1048576,1217280,2359296,16384,294912,153888,448800,294938,153888,26,0.657112,0.999912,compute,589.876
+array,4x4,16.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,4,8,4,36864,4718592,0,598016,147456,16384,0,761856,2359296,16384,294912,113664,408576,294921,113664,9,0.721805,0.999969,compute,589.842
+array,4x4,16.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,4,8,32,9216,9437184,0,37120,267264,16384,2228224,2548992,4718592,16384,589824,322080,911904,589850,322080,26,0.646805,0.999956,compute,1179.7
+array,4x4,16.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,4,8,4,73728,9437184,0,1187840,294912,16384,0,1499136,4718592,16384,589824,224256,814080,589833,224256,9,0.724528,0.999985,compute,1179.666
+array,4x4,16.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,4x4,16.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,4x4,16.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,4x4,16.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,4x4,16.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,4x4,16.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,4x4,16.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,4,1,16,12,640,0,680,192,10,240,1122,832,10,192,142,334,205,142,13,0.11976,0.195122,compute,0.41
+array,4x4,16.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,4,1,4,48,640,0,680,192,10,0,882,832,10,192,136,328,199,136,7,0.121951,0.201005,compute,0.398
+array,4x4,16.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,4x4,16.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,8x8,64.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,8x8,64.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,8x8,64.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,8,16,27,256,884736,0,992,12288,32768,0,46048,221184,32768,13824,5756,19580,13877,5756,53,0.706027,0.996181,compute,27.754
+array,8x8,64.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,8,16,27,256,884736,0,63488,12288,32768,0,108544,221184,32768,13824,13568,27392,13877,13568,53,0.504673,0.996181,compute,27.754
+array,8x8,64.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,8,16,288,256,9437184,0,9344,131072,32768,0,173184,2359296,32768,147456,21648,169104,147828,21648,372,0.871984,0.997484,compute,295.656
+array,8x8,64.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,8,32,16,2304,9437184,0,299008,131328,32768,0,463104,2359296,32768,147456,59904,207360,147516,59904,60,0.711111,0.999593,compute,295.032
+array,8x8,64.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,8x8,64.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,8x8,64.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,8,16,288,128,4718592,0,18688,65536,16384,0,100608,1179648,16384,73728,12576,86304,74100,12576,372,0.854283,0.99498,compute,148.2
+array,8x8,64.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,8,32,16,1152,4718592,0,149504,65664,16384,0,231552,1179648,16384,73728,29952,103680,73788,29952,60,0.711111,0.999187,compute,147.576
+array,8x8,64.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,8,32,128,320,9437184,0,37120,131328,16384,524288,709120,2359296,16384,147456,88672,236128,147909,88672,453,0.624475,0.996937,compute,295.818
+array,8x8,64.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,8,32,16,2304,9437184,0,296960,131328,16384,0,444672,2359296,16384,147456,57600,205056,147516,57600,60,0.719101,0.999593,compute,295.032
+array,8x8,64.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,8x8,64.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,8x8,64.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,8x8,64.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,8x8,64.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,8x8,64.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,8x8,64.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,16,4,640,0,680,64,10,240,994,768,10,128,125,253,157,125,29,0.039526,0.063694,compute,0.314
+array,8x8,64.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,1,64,640,0,680,64,10,0,754,768,10,128,135,263,137,135,9,0.038023,0.072993,transfer,0.274
+array,8x8,64.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,8x8,64.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,16x16,256.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,16x16,256.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,16x16,256.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,16,27,64,884736,0,992,3072,32768,0,36832,110592,32768,3456,4604,8060,4652,4604,1196,0.428784,0.742906,transfer,9.304
+array,16x16,256.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,256,27,8,884736,0,3968,6144,32768,0,42880,110592,32768,3456,5360,8816,5634,5360,2178,0.392015,0.613419,transfer,11.268
+array,16x16,256.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,16,64,288,32,9437184,0,9344,65536,32768,0,107648,1179648,32768,36864,13456,50320,37832,13456,968,0.732591,0.974413,compute,75.664
+array,16x16,256.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,128,64,80,9437184,0,74752,65600,32768,0,173120,1179648,32768,36864,21648,58512,37370,21648,506,0.630025,0.98646,compute,74.74
+array,16x16,256.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,16x16,256.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,16x16,256.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,16,64,288,16,4718592,0,18688,32768,16384,0,67840,589824,16384,18432,8480,26912,19400,8480,968,0.684899,0.950103,compute,38.8
+array,16x16,256.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,128,64,40,4718592,0,37376,32800,16384,0,86560,589824,16384,18432,10824,29256,18938,10824,506,0.630025,0.973281,compute,37.876
+array,16x16,256.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,16,64,576,16,9437184,0,37120,65536,16384,0,119040,1179648,16384,36864,14880,51744,38664,14880,1800,0.71243,0.953445,compute,77.328
+array,16x16,256.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,128,64,72,9437184,0,74240,65592,16384,0,156216,1179648,16384,36864,19536,56400,37370,19536,506,0.653617,0.98646,compute,74.74
+array,16x16,256.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,16x16,256.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,16x16,256.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,16x16,256.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,16x16,256.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,16x16,256.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,16x16,256.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,105,169,132,105,68,0.014793,0.018939,transfer,0.264
+array,16x16,256.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,0,754,704,10,64,95,159,103,95,39,0.015723,0.024272,transfer,0.206
+array,16x16,256.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,16x16,256.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,32x32,1024.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,32x32,1024.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,32x32,1024.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,32,27,32,884736,0,992,3072,32768,0,36832,55296,32768,864,4604,5468,4619,4604,3755,0.15801,0.187053,transfer,9.238
+array,32x32,1024.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,32,128,27,8,884736,0,7936,3072,32768,0,43776,55296,32768,864,5472,6336,5472,5472,4608,0.136364,0.157895,transfer,10.944
+array,32x32,1024.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,32,32,288,32,9437184,0,9344,32768,32768,0,74880,589824,32768,9216,9360,18576,10640,9360,1424,0.496124,0.866165,transfer,21.28
+array,32x32,1024.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,32,128,32,72,9437184,0,74752,32832,32768,0,140352,589824,32768,9216,17544,26760,17672,17544,8456,0.344395,0.521503,transfer,35.344
+array,32x32,1024.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,32x32,1024.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,32x32,1024.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,32,32,288,16,4718592,0,18688,16384,16384,0,51456,294912,16384,4608,6432,11040,7168,6432,2560,0.417391,0.642857,transfer,14.336
+array,32x32,1024.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,32,128,16,72,4718592,0,37376,16416,16384,0,70176,294912,16384,4608,8808,13416,8872,8808,4264,0.34347,0.519387,transfer,17.744
+array,32x32,1024.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,32,32,256,48,9437184,0,37120,32800,16384,262144,348448,589824,16384,9216,43568,52784,43724,43568,34508,0.174598,0.210777,transfer,87.448
+array,32x32,1024.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,32,128,32,72,9437184,0,74240,32832,16384,0,123456,589824,16384,9216,15432,24648,15560,15432,6344,0.373905,0.592288,transfer,31.12
+array,32x32,1024.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,32x32,1024.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,32x32,1024.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,32x32,1024.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,32x32,1024.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,32x32,1024.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,32x32,1024.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,105,169,132,105,68,0.003698,0.004735,transfer,0.264
+array,32x32,1024.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,0,754,704,10,64,95,159,103,95,39,0.003931,0.006068,transfer,0.206
+array,32x32,1024.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,32x32,1024.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,64x64,4096.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,64x64,4096.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,64x64,4096.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,64,27,16,884736,0,992,3072,32768,0,36832,41472,32768,432,4604,5036,4607,4604,4175,0.042891,0.046885,transfer,9.214
+array,64x64,4096.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,32,128,27,8,884736,0,7936,3072,32768,0,43776,41472,32768,432,5472,5904,5472,5472,5040,0.036585,0.039474,transfer,10.944
+array,64x64,4096.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,32,64,288,16,9437184,0,9344,32768,32768,0,74880,442368,32768,4608,9360,13968,9424,9360,4816,0.164948,0.244482,transfer,18.848
+array,64x64,4096.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,32,128,288,8,9437184,0,74752,32768,32768,0,140288,442368,32768,4608,17536,22144,17600,17536,12992,0.104046,0.130909,transfer,35.2
+array,64x64,4096.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,64x64,4096.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,64x64,4096.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,64,64,128,12,4718592,0,18688,8200,16384,262144,305416,147456,16384,1152,38180,39332,38194,38180,37042,0.029289,0.030162,transfer,76.388
+array,64x64,4096.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,64,64,128,12,4718592,0,74752,8200,16384,0,99336,147456,16384,1152,12420,13572,12452,12420,11300,0.084881,0.092515,transfer,24.904
+array,64x64,4096.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,64,64,128,20,9437184,0,37120,16400,16384,524288,594192,294912,16384,2304,74276,76580,74290,74276,71986,0.030086,0.031014,transfer,148.58
+array,64x64,4096.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,64,64,128,20,9437184,0,148480,16400,16384,0,181264,294912,16384,2304,22660,24964,22724,22660,20420,0.092293,0.101391,transfer,45.448
+array,64x64,4096.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,64x64,4096.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,64x64,4096.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,64x64,4096.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,64x64,4096.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,64x64,4096.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,64x64,4096.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,105,169,132,105,68,0.000925,0.001184,transfer,0.264
+array,64x64,4096.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,0,754,704,10,64,95,159,103,95,39,0.000983,0.001517,transfer,0.206
+array,64x64,4096.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,64x64,4096.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,8x32,256.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,8x32,256.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,8x32,256.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,32,27,32,884736,0,992,3072,32768,0,36832,138240,32768,3456,4604,8060,4700,4604,1244,0.428784,0.735319,transfer,9.4
+array,8x32,256.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,16,256,27,8,884736,0,3968,6144,32768,0,42880,138240,32768,3456,5360,8816,5634,5360,2178,0.392015,0.613419,transfer,11.268
+array,8x32,256.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,8,64,288,64,9437184,0,9344,131072,32768,0,173184,1474560,32768,36864,21648,58512,37584,21648,720,0.630025,0.980843,compute,75.168
+array,8x32,256.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,16,128,64,80,9437184,0,74752,65600,32768,0,173120,1474560,32768,36864,21648,58512,37370,21648,506,0.630025,0.98646,compute,74.74
+array,8x32,256.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,8x32,256.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,8x32,256.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,8,64,288,32,4718592,0,18688,65536,16384,0,100608,737280,16384,18432,12576,31008,19296,12576,864,0.594427,0.955224,compute,38.592
+array,8x32,256.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,16,128,64,40,4718592,0,37376,32800,16384,0,86560,737280,16384,18432,10824,29256,18938,10824,506,0.630025,0.973281,compute,37.876
+array,8x32,256.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,8,64,576,32,9437184,0,37120,131072,16384,0,184576,1474560,16384,36864,23072,59936,38048,23072,1184,0.615056,0.968881,compute,76.096
+array,8x32,256.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,16,128,64,72,9437184,0,74240,65592,16384,0,156216,1474560,16384,36864,19536,56400,37370,19536,506,0.653617,0.98646,compute,74.74
+array,8x32,256.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,8x32,256.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,8x32,256.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,8x32,256.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,8x32,256.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,8x32,256.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,8x32,256.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,16,4,640,0,680,64,10,240,994,768,10,128,125,253,157,125,29,0.009881,0.015924,compute,0.314
+array,8x32,256.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,1,64,640,0,680,64,10,0,754,768,10,128,135,263,137,135,9,0.009506,0.018248,transfer,0.274
+array,8x32,256.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,8x32,256.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,32x8,256.0,0,input_QuantizeLinear,QuantizeLinear,vector,weight_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,32x8,256.0,0,input_QuantizeLinear,QuantizeLinear,vector,output_stationary,1,,,,,,,2,0,3072,0,12288,3072,0,15360,12288,3072,192,1920,2112,1920,1920,1728,,,transfer,3.84
+array,32x8,256.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,27,1024,32,8,27,128,884736,0,992,3072,32768,0,36832,138240,32768,3456,4604,8060,4628,4604,1172,0.428784,0.746759,transfer,9.256
+array,32x8,256.0,1,/features/features.0/Conv_quant,QLinearConv,gemm,output_stationary,1,32,27,1024,32,128,27,8,884736,0,7936,3072,32768,0,43776,138240,32768,3456,5472,8928,5732,5472,2276,0.387097,0.602931,transfer,11.464
+array,32x8,256.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,weight_stationary,1,32,288,1024,32,8,288,128,9437184,0,9344,32768,32768,0,74880,1474560,32768,36864,9360,46224,38096,9360,1232,0.797508,0.967661,compute,76.192
+array,32x8,256.0,2,/features/features.3/Conv_quant,QLinearConv,gemm,output_stationary,1,32,288,1024,32,128,64,40,9437184,0,74752,32800,32768,0,140320,1474560,32768,36864,17544,54408,37762,17544,898,0.677547,0.976219,compute,75.524
+array,32x8,256.0,3,/features/features.6/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,32x8,256.0,3,/features/features.6/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,128,0,32768,0,32768,8192,0,40960,32768,8192,2048,5120,7168,5128,5120,3080,,,transfer,10.256
+array,32x8,256.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,288,256,32,64,288,8,4718592,0,18688,16384,16384,0,51456,737280,16384,18432,6432,24864,20112,6432,1680,0.741313,0.916468,compute,40.224
+array,32x8,256.0,4,/features/features.7/Conv_quant,QLinearConv,gemm,output_stationary,1,64,288,256,32,128,64,20,4718592,0,37376,16400,16384,0,70160,737280,16384,18432,8772,27204,19330,8772,898,0.677547,0.953544,compute,38.66
+array,32x8,256.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,weight_stationary,1,64,576,256,32,16,256,96,9437184,0,37120,32832,16384,262144,348480,1474560,16384,36864,43584,80448,50066,43584,13202,0.458234,0.736308,transfer,100.132
+array,32x8,256.0,5,/features/features.10/Conv_quant,QLinearConv,gemm,output_stationary,1,64,576,256,32,128,64,36,9437184,0,74240,32796,16384,0,123420,1474560,16384,36864,15432,52296,37762,15432,898,0.704911,0.976219,compute,75.524
+array,32x8,256.0,6,/features/features.13/MaxPool,MaxPool,vector,weight_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,32x8,256.0,6,/features/features.13/MaxPool,MaxPool,vector,output_stationary,1,,,,,,,64,0,16384,0,16384,4096,0,20480,16384,4096,1024,2560,3584,2568,2560,1544,,,transfer,5.136
+array,32x8,256.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,weight_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,32x8,256.0,7,/features/features.14/GlobalAveragePool_quant,QLinearGlobalAveragePool,vector,output_stationary,1,,,,,,,16,0,4160,0,4096,64,0,4160,4096,64,272,528,800,544,528,272,,,transfer,1.088
+array,32x8,256.0,8,/features/features.15/Flatten,Flatten,layout,weight_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,32x8,256.0,8,/features/features.15/Flatten,Flatten,layout,output_stationary,1,,,,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,none,0.0
+array,32x8,256.0,9,/fc/Gemm_quant,QGemm,gemm,weight_stationary,1,10,64,1,10,1,32,2,640,0,680,64,10,80,834,704,10,64,105,169,132,105,68,0.014793,0.018939,transfer,0.264
+array,32x8,256.0,9,/fc/Gemm_quant,QGemm,gemm,output_stationary,1,10,64,1,10,1,8,8,640,0,680,64,10,0,754,704,10,64,95,159,103,95,39,0.015723,0.024272,transfer,0.206
+array,32x8,256.0,10,logits_DequantizeLinear,DequantizeLinear,vector,weight_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
+array,32x8,256.0,10,logits_DequantizeLinear,DequantizeLinear,vector,output_stationary,1,,,,,,,1,0,10,0,10,40,0,50,10,40,1,7,8,8,7,7,,,transfer,0.016
