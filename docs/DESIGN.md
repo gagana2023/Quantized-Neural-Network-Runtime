@@ -78,7 +78,7 @@ Each entry: the decision, the alternatives, and why.
 - **QLinearGlobalAveragePool:** `acc = sum(x) - x_zp * H * W` (int32), `M = x_scale / (y_scale * H * W)` in float32, then the shared requantiser, so it also honours `requant="fixed"`. 30/30 cases bit-exact in float mode.
 
 ### D16. Executor: naive buffers, returned outputs are copies
-- **Decision:** one preallocated `np.empty` per node output; kernels write into it; `run` returns copies of the graph outputs. `planner="greedy"` raises `NotImplementedError` until M4, when the buffers become arena views (copying the outputs is what will make that safe).
+- **Decision:** one preallocated `np.empty` per node output; kernels write into it; `run` returns copies of the graph outputs. `planner="greedy"` (M4, D21-D23) makes the buffers arena views; copying the outputs is what makes that safe.
 - `dump_dir` writes `NNN_<sanitised name>.npy` for every input and intermediate plus `index.json` (original name -> file, in execution order), because ONNX tensor names contain `/` and `:`.
 
 ### D17. Single-op parity tests
@@ -104,3 +104,26 @@ Each entry: the decision, the alternatives, and why.
 - **Isolated:** each node run in fixed mode on Mode A's input tensors. Only that node's requantiser differs, so this is the cleanest number for "how different is one fixed-point requantiser".
 - **Cumulative:** the whole network free-running in fixed mode. This is what a fixed-point accelerator would actually produce; earlier differences propagate and grow.
 - Mode A is bit-exact with ORT, so both are also deviations from ORT. D10 (single vs two-step rounding in Mode B) is unchanged and still open for the user.
+
+## M4
+
+### D21. What counts as an activation, and how time is measured
+- **Decision:** activations are the graph inputs plus every node output (`int8rt/planner.py`). Initialisers (weights, biases, scales) are reported separately as `weights_kib`; kernel scratch is `im2col_scratch_kib`. Time is the node index; graph inputs are defined at step -1; a tensor's last use is its last consumer; graph inputs and outputs are pinned to the last node, as the spec says.
+- **The float32 graph input is in the arena** and is pinned, so `run` copies the caller's array into it. This is honest but costly: on CIFAR it is 12 KiB of the 76 KiB peak. The alternative (leave it outside) would hide that memory and flatter the result.
+- **Lifetimes are closed intervals.** A node's output therefore never shares bytes with that node's own inputs. Reusing an input's bytes for the output (in-place) is not attempted: the NumPy kernels read their inputs while writing the output (im2col, pooling windows), so it would be unsafe without per-kernel proofs.
+- **Flatten copies.** It could alias its input (same bytes, new shape), which would save a few bytes; it is left as a real copy to keep one rule: every tensor owns its bytes.
+
+### D22. Greedy-by-size, and why the three numbers are what they are
+- **Algorithm:** sort by size descending (ties: earlier definition, then name, so plans are deterministic); place each tensor at the lowest 64-byte-aligned offset where it clears every already placed tensor whose lifetime overlaps. Arena size is the highest end rounded up to 64.
+- **Naive** = sum of all sizes. **Lower bound** = max over steps of the total live size. Planned >= lower bound always; planned is not guaranteed optimal (this is dynamic storage allocation, NP-hard), because placing large tensors first can fragment space for small ones.
+- **Measured:** CIFAR planned == lower bound (76 KiB). KWS planned exceeds it by 24 bytes: 40,000 + 1,960 = 41,960 bytes, rounded up to the 64-byte multiple 41,984. So on these two chains greedy is optimal up to alignment; this says little about branchy graphs such as MobileNetV2 residuals.
+- **Alternatives:** a time-ordered first-fit (simpler, worse on mixed sizes); exact ILP (not needed here, not in the spec).
+
+### D23. Real sharing and how it is kept safe
+- **Decision:** the arena is one `np.int8` buffer; each tensor is `arena[off:off+nbytes].view(dtype).reshape(shape)`. Float32 tensors are safe because every offset is a multiple of 64, which also covers the 16-byte alignment that ReduceMean parity assumes (MISMATCHES M-001).
+- **Dump:** with an arena a later tensor overwrites an earlier one, so `dump_dir` now writes each tensor right after its node runs (not at the end of `run`). `index.json` is written when the run completes.
+- **Safety checks:** `find_overlaps` (no two simultaneously-live tensors share bytes; a test also feeds it a deliberately bad plan); outputs are returned as copies (D16); tests fill the arena with random bytes before each run, so a kernel that did not write its whole output would differ from the planner-off result.
+
+### D24. CLI
+- `python -m int8rt run --model m.onnx --input x.npy --output y.npy [--requant float|fixed] [--planner naive|greedy] [--dump-all DIR]` and `python -m int8rt memreport --model m.onnx` (JSON, KiB). Single-input / single-output models use `.npy`; otherwise `.npz` keyed by tensor name.
+- `im2col_scratch_kib` is only the largest int32 im2col matrix of this runtime's NumPy conv kernel (CIFAR 1152 KiB, KWS 31.25 KiB). It is not a hardware scratchpad and not the total of NumPy temporaries; it is reported so that nobody mistakes the activation arena for the host's whole working set.

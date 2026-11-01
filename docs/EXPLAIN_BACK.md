@@ -214,3 +214,31 @@ not a general claim.
    .5; float mode rounds half to even, gemmlowp rounds half up. That is my likely explanation, not something I isolated by experiment.
 5. **What are the limits of this evidence?** Per-layer parity is on 100 inputs per model, one ORT version (1.31.1), one CPU/OS; the
    final logits are checked on whole test sets. Passing here says nothing about other ORT versions or CPUs with different SIMD paths.
+
+## M4 — Memory planner
+
+### What was built
+A static planner that decides, before running, where each activation tensor lives inside one shared byte buffer (the arena), so that tensors never needed at the same time reuse the same bytes. The executor then really uses those bytes as NumPy views.
+
+### Key pieces
+
+**1. Liveness analysis.** A tensor is needed from the step that produces it until the step of its last reader. Graph inputs and outputs are kept for the whole run.
+*Example:* chain `x -> a -> b -> c`. `a` is produced at step 0 and last read at step 1, so it lives [0,1]; `c` is the output and lives to the end. The intervals are closed, so a node's output is never placed on top of its own input.
+
+**2. Three numbers.** *Naive* = every tensor has its own buffer (sum of sizes). *Lower bound* = at the busiest step, the total size of the tensors alive then; no layout can beat it. *Planned* = what greedy-by-size actually achieves.
+*Example:* three tensors of 100 bytes where only two are ever alive together: naive 300, lower bound 200, planned 200.
+
+**3. Greedy-by-size.** Sort tensors largest first. For each, look at the already placed tensors whose lifetime overlaps its own, and put it at the lowest 64-byte-aligned offset that does not collide with them. Big tensors get first pick, which usually keeps the arena small. Not always optimal: an early big placement can leave holes that later tensors do not fit.
+*Example:* A(256) goes at 0; C(192) overlaps A so goes to 256; D(64) overlaps only C, so it drops into the space at 0 that A occupies only while A is alive.
+
+**4. Real views, not bookkeeping.** `arena[off:off+n].view(dtype).reshape(shape)` is a NumPy array that points into the arena. Writing a tensor writes the arena; two tensors at the same offset really share memory. The tests fill the arena with garbage first: if a kernel forgot to write some output element, stale bytes would show up as a difference.
+
+**5. Why the dump had to change.** With sharing, a later tensor overwrites an earlier one, so intermediate tensors are saved right after each node runs.
+
+### Likely interview questions
+
+1. **How does your planner work and why is it not optimal?** Liveness intervals, then greedy: biggest tensor first, lowest aligned offset free of live neighbours. Optimal placement is NP-hard (dynamic storage allocation); greedy can fragment. On my two chain models it hit the lower bound (CIFAR) or was 24 bytes above it, which is only alignment round-up (KWS).
+2. **How far is it from the lower bound, and what does the bound mean?** The bound is the largest total of simultaneously-live tensors; nothing can go below it. CIFAR 76.00 vs 76.00 KiB, KWS 41.00 vs 40.98 KiB. Reductions from naive were 38% and 61%.
+3. **How do you know sharing memory did not change results?** Outputs are byte-identical with and without the planner on 100 real inputs per model in both requant modes, all intermediates on 5 inputs, with the arena pre-filled with random bytes. A test asserts no two overlapping-lifetime tensors overlap in memory, and a negative control confirms the checker catches a bad plan.
+4. **Why is the float32 input counted?** It is an activation alive for the whole run (pinned). Leaving it out would make the result look better but hide 12 KiB of CIFAR's 76 KiB.
+5. **What does it not do?** No in-place operations (output over input), no Flatten aliasing, no tensor splitting; weights and the NumPy kernels' temporaries are outside the arena (CIFAR's biggest im2col matrix is 1152 KiB, much larger than the activations). Chain models also flatter greedy; residual graphs would stress it more.

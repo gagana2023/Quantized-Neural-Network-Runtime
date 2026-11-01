@@ -1,0 +1,268 @@
+{
+  "env": {
+    "date": "2026-11-01T06:29:38+05:30",
+    "git_commit": "e9a58266e0306bf15157496960ece2e7b8466e28+dirty",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.10",
+    "packages": {
+      "numpy": "2.5.4",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.1",
+      "torch": "2.15.0",
+      "torchvision": "0.29.2",
+      "PyYAML": "6.0.3"
+    },
+    "command": "python -m tools.run_memory_report --model kws"
+  },
+  "what": "Activation memory of int8rt on this model (a property of the graph and the planner; not measured host RSS, not an accelerator figure). Activations = graph input (float32, pinned) + every node output; weights and scratch are reported separately.",
+  "model": "kws",
+  "model_file": "models\\kws\\kws\\dscnn_int8.onnx",
+  "activation_kib": {
+    "naive": 104.326171875,
+    "planned": 41.0,
+    "lower_bound": 40.9765625
+  },
+  "planned_over_lower_bound_kib": 0.0234375,
+  "reduction_naive_to_planned_percent": 60.7,
+  "weights_kib": 26.7265625,
+  "im2col_scratch_kib": 31.25,
+  "im2col_scratch_note": "largest int32 im2col matrix of one QLinearConv call in int8rt's NumPy kernel; other NumPy temporaries are not counted; not part of the arena",
+  "alignment_bytes": 64,
+  "arena_bytes": 41984,
+  "overlapping_live_tensor_pairs": [],
+  "tensors": [
+    {
+      "name": "mfcc",
+      "dtype": "float32",
+      "shape": [
+        1,
+        1,
+        49,
+        10
+      ],
+      "bytes": 1960,
+      "first_step": -1,
+      "last_step": 14,
+      "arena_offset": 40000
+    },
+    {
+      "name": "mfcc_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        1,
+        49,
+        10
+      ],
+      "bytes": 490,
+      "first_step": 0,
+      "last_step": 1,
+      "arena_offset": 8000
+    },
+    {
+      "name": "/stem/stem.0/Conv_output_0_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "bytes": 8000,
+      "first_step": 1,
+      "last_step": 2,
+      "arena_offset": 0
+    },
+    {
+      "name": "/blocks/blocks.0/blocks.0.0/Conv_output_0_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "bytes": 8000,
+      "first_step": 2,
+      "last_step": 3,
+      "arena_offset": 8000
+    },
+    {
+      "name": "/blocks/blocks.0/blocks.0.3/Conv_output_0_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "bytes": 8000,
+      "first_step": 3,
+      "last_step": 4,
+      "arena_offset": 0
+    },
+    {
+      "name": "/blocks/blocks.1/blocks.1.0/Conv_output_0_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "bytes": 8000,
+      "first_step": 4,
+      "last_step": 5,
+      "arena_offset": 8000
+    },
+    {
+      "name": "/blocks/blocks.1/blocks.1.3/Conv_output_0_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "bytes": 8000,
+      "first_step": 5,
+      "last_step": 6,
+      "arena_offset": 0
+    },
+    {
+      "name": "/blocks/blocks.2/blocks.2.0/Conv_output_0_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "bytes": 8000,
+      "first_step": 6,
+      "last_step": 7,
+      "arena_offset": 8000
+    },
+    {
+      "name": "/blocks/blocks.2/blocks.2.3/Conv_output_0_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "bytes": 8000,
+      "first_step": 7,
+      "last_step": 8,
+      "arena_offset": 0
+    },
+    {
+      "name": "/blocks/blocks.3/blocks.3.0/Conv_output_0_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "bytes": 8000,
+      "first_step": 8,
+      "last_step": 9,
+      "arena_offset": 8000
+    },
+    {
+      "name": "/blocks/blocks.3/blocks.3.3/Conv_output_0_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "bytes": 8000,
+      "first_step": 9,
+      "last_step": 10,
+      "arena_offset": 32000
+    },
+    {
+      "name": "/blocks/blocks.3/blocks.3.5/Relu_output_0",
+      "dtype": "float32",
+      "shape": [
+        1,
+        64,
+        25,
+        5
+      ],
+      "bytes": 32000,
+      "first_step": 10,
+      "last_step": 11,
+      "arena_offset": 0
+    },
+    {
+      "name": "/ReduceMean_output_0",
+      "dtype": "float32",
+      "shape": [
+        1,
+        64
+      ],
+      "bytes": 256,
+      "first_step": 11,
+      "last_step": 12,
+      "arena_offset": 32000
+    },
+    {
+      "name": "/ReduceMean_output_0_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        64
+      ],
+      "bytes": 64,
+      "first_step": 12,
+      "last_step": 13,
+      "arena_offset": 0
+    },
+    {
+      "name": "logits_quantized",
+      "dtype": "int8",
+      "shape": [
+        1,
+        12
+      ],
+      "bytes": 12,
+      "first_step": 13,
+      "last_step": 14,
+      "arena_offset": 64
+    },
+    {
+      "name": "logits",
+      "dtype": "float32",
+      "shape": [
+        1,
+        12
+      ],
+      "bytes": 48,
+      "first_step": 14,
+      "last_step": 14,
+      "arena_offset": 0
+    }
+  ],
+  "planner_on_vs_off": [
+    {
+      "requant": "float",
+      "inputs": 100,
+      "final_outputs_identical": 100,
+      "intermediate_tensor_comparisons": 80,
+      "intermediate_tensors_identical": 80
+    },
+    {
+      "requant": "fixed",
+      "inputs": 100,
+      "final_outputs_identical": 100,
+      "intermediate_tensor_comparisons": 80,
+      "intermediate_tensors_identical": 80
+    }
+  ]
+}

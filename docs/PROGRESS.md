@@ -122,3 +122,27 @@ int8rt float accuracy equals ORT INT8 on both models. KWS ORT logits are also id
 - Per-layer parity covers the first 100 inputs per model (the spec's minimum); only the final logits are checked on every test input.
 - Results JSON records `+dirty` commits because earlier results files were untracked while later runs started; the code commit is `3ec7e48`. The `what` label in `accuracy_cifar.json` was corrected by hand after the run (a tool bug kept the old M0 label, fixed in the tool afterwards); no numbers were edited.
 - Host CPU wall times in the JSON are incidental, not performance claims.
+
+## M4 — Memory planner (done)
+
+**Built:** `int8rt/planner.py` (liveness, greedy-by-size arena, lower bound, overlap check), `Executor(planner="greedy")` with real arena views, `int8rt/cli.py` (`run`, `memreport`), `tools/run_memory_report.py`, `tests/test_planner.py`.
+Run: `python -m tools.run_memory_report --model cifar` and `--model kws`; `python -m int8rt memreport --model <onnx>`.
+
+**Activation memory (`results/memory_<model>.json`; a property of the graph, not a host measurement):**
+
+| Model | Naive KiB | Planned KiB | Lower bound KiB | Naive to planned | Weights KiB |
+| --- | --- | --- | --- | --- | --- |
+| CIFAR CNN | 123.17 | 76.00 | 76.00 | -38.3% | 66.28 |
+| KWS DS-CNN | 104.33 | 41.00 | 40.98 | -60.7% | 26.73 |
+
+Activations include the pinned float32 graph input (12 KiB CIFAR, 1.9 KiB KWS). KWS planned is 24 bytes over the bound, all of it the 64-byte round-up of the arena (DESIGN D22).
+
+**Planner on vs off:** on 100 real test inputs per model and both requantisation modes, final outputs are byte-identical (100/100 each), and so are all intermediate tensors on the first 5 inputs (CIFAR 60/60, KWS 80/80 per mode), with the arena refilled with random bytes before every run. No live tensors overlap in either plan.
+
+**Checks (local):** `ruff`, `ruff format`, `mypy` clean; `pytest`: 402 passed (17 new; the old "greedy not available" test was removed). CI has still never run (no GitHub remote).
+
+**Caveats**
+- Both models are straight chains, so greedy meeting the lower bound is expected; it is not evidence for branchy graphs.
+- `im2col_scratch_kib` describes this NumPy kernel only (1152 KiB for CIFAR, far above the activations); it is not part of the arena.
+- No in-place reuse and no Flatten aliasing (DESIGN D21), so planned can be higher than a more aggressive planner would give.
+- `memory_kws.json` records `+dirty` because `memory_cifar.json` was untracked at that moment; the code commit is `e9a5826`.
