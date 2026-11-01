@@ -297,13 +297,15 @@ def cost_gemm(w: GemmWork, cfg: AccelConfig, scheme: str) -> LayerCost:
 # ---------------------------------------------------------------- vector-unit layers
 
 
-def cost_vector(w: VectorWork, cfg: AccelConfig, scheme: str) -> LayerCost:
-    """Stream ``w`` through the vector unit in equal tiles that fit half the activation SRAM."""
+MAX_VECTOR_TILE_FACTOR = 64  # try up to this many times the minimum tile count
+
+
+def _vector_cost(w: VectorWork, cfg: AccelConfig, scheme: str, n: int) -> LayerCost:
+    """``w`` streamed through the vector unit in ``n`` near-equal tiles (none if no data moves)."""
     total_bytes = w.in_bytes + w.out_bytes
     if total_bytes == 0:
         compute = load = store = np.zeros(0, dtype=np.int64)
     else:
-        n = math.ceil(total_bytes / (cfg.act_sram_bytes // 2))
 
         def split(total: int) -> I64:
             return np.full(n, total // n, dtype=np.int64) + (np.arange(n) < total % n)
@@ -334,6 +336,23 @@ def cost_vector(w: VectorWork, cfg: AccelConfig, scheme: str) -> LayerCost:
         total_cycles_no_overlap=no_overlap,
         total_cycles_double_buffered=double,
     )
+
+
+def cost_vector(w: VectorWork, cfg: AccelConfig, scheme: str) -> LayerCost:
+    """Best tile count (fewest double-buffered cycles; fewer tiles on ties) for a vector layer.
+
+    A tile's input plus output must fit half the activation SRAM, which sets the minimum count;
+    more, smaller tiles can overlap transfer with compute better.
+    """
+    total_bytes = w.in_bytes + w.out_bytes
+    if total_bytes == 0:
+        return _vector_cost(w, cfg, scheme, 0)
+    n_min = math.ceil(total_bytes / (cfg.act_sram_bytes // 2))
+    counts = sorted(
+        {min(n_min * 2**j, total_bytes) for j in range(MAX_VECTOR_TILE_FACTOR.bit_length())}
+    )
+    costs = [_vector_cost(w, cfg, scheme, n) for n in counts]
+    return min(costs, key=lambda c: (c.total_cycles_double_buffered, c.tiles))
 
 
 # ---------------------------------------------------------------- whole graph

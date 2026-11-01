@@ -12,6 +12,7 @@ from costmodel.model import (
     SCHEMES,
     AccelConfig,
     _gemm_cost,
+    _vector_cost,
     cost_gemm,
     cost_vector,
     estimate_graph,
@@ -163,12 +164,19 @@ def test_nothing_fits() -> None:
 
 def test_vector_layer() -> None:
     cfg = AccelConfig("v", 4, 4, 4096, 64, 4, 4, 100.0)  # half of act SRAM = 32 B
-    # 64 B in + 64 B out -> 4 tiles of 16 B in / 16 B out / 32 ops: compute 8, load 4, store 4.
+    w = VectorWork("v", "MaxPool", 64, 64, 128)
+    # 4 tiles of 16 B in / 16 B out / 32 ops: compute 8, load 4, store 4 each.
     # nodb 4 * 16 = 64; db = 4 + 4 * max(8, <=8) + 4 = 40.
-    c = cost_vector(VectorWork("v", "MaxPool", 64, 64, 128), cfg, "weight_stationary")
+    c = _vector_cost(w, cfg, "weight_stationary", 4)
     assert (c.compute_cycles, c.transfer_cycles) == (32, 32)
     assert (c.total_cycles_no_overlap, c.total_cycles_double_buffered) == (64, 40)
     assert c.macs == 0 and c.utilisation(cfg, True) is None
+    # 8 tiles of 8 B / 8 B / 16 ops: compute 4, load 2, store 2: db = 2 + 8 * 4 + 2 = 36
+    assert _vector_cost(w, cfg, "weight_stationary", 8).total_cycles_double_buffered == 36
+    # the search takes at least the minimum 4 tiles and finds something no worse than 36
+    best = cost_vector(w, cfg, "weight_stationary")
+    assert best.tiles >= 4 and best.total_cycles_double_buffered <= 36
+    assert best.total_cycles_double_buffered >= best.compute_cycles
 
 
 def test_flatten_costs_nothing() -> None:
