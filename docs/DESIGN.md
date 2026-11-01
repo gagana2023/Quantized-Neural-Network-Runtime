@@ -127,3 +127,30 @@ Each entry: the decision, the alternatives, and why.
 ### D24. CLI
 - `python -m int8rt run --model m.onnx --input x.npy --output y.npy [--requant float|fixed] [--planner naive|greedy] [--dump-all DIR]` and `python -m int8rt memreport --model m.onnx` (JSON, KiB). Single-input / single-output models use `.npy`; otherwise `.npz` keyed by tensor name.
 - `im2col_scratch_kib` is only the largest int32 im2col matrix of this runtime's NumPy conv kernel (CIFAR 1152 KiB, KWS 31.25 KiB). It is not a hardware scratchpad and not the total of NumPy temporaries; it is reported so that nobody mistakes the activation arena for the host's whole working set.
+
+## M5
+
+### D25. What the model is, and what it is not
+- **Decision:** a generic analytical model in `costmodel/` (`mapping.py` graph -> work, `model.py` tiling and cycle formulas, `sweep.py` sweeps). Config is `costmodel/configs/base.yaml`: 16x16 MACs/cycle, 32 KiB weight SRAM, 64 KiB activation SRAM, 8 B/cycle DMA, 16 vector lanes, 500 MHz. Every value is an assumption chosen to look like a small edge device; none is taken from a real chip.
+- **Layer isolation:** each layer reads its input from DRAM and writes its output to DRAM. Cross-layer residency and fusion are not modelled (see RESULTS.md for the likely effect).
+
+### D26. Mapping and array dataflow
+- **Decision:** convolution -> per-group GEMM with M = output channels per group (rows of the array), K = Cin/group x kh x kw (streamed, one step per cycle), N = output H x W (columns). A tile of (mt, nt, kt) takes `ceil(mt/R) * ceil(nt/C) * kt` cycles. Depthwise = `groups` GEMMs with M = 1 run one after another; QGemm / QLinearMatMul = GEMM with the constant matrix as the weights. MaxPool, GAP, ReduceMean, QuantizeLinear, DequantizeLinear run on the vector unit (one element-op per lane per cycle; GAP/ReduceMean charge one op per input and one per output); Flatten is free.
+- **Consequence:** a layer with M < R or N < C leaves array rows or columns idle. This is what makes depthwise (M = 1) and batch-1 FC (N = 1) slow, and it is deliberate: the spec asks me to show it.
+- **Conv input traffic:** a K x N tile of the im2col matrix costs `tile * unique_input / (K*N)` bytes of DRAM traffic (a 3x3 conv reads each pixel once, not nine times). No halo re-fetch between neighbouring tiles.
+
+### D27. Tiling, loop orders, and the two schedules
+- **Loop orders:** WS = for mt: for kt: load W once; for nt: stream X. OS = for mt: for nt: for kt: load W and X; store Y once. WS reads weights once and spills INT32 partial sums to DRAM only if K is cut; OS re-reads weights per N tile and keeps accumulators on chip.
+- **Capacity:** a tile's weights (+ INT32 bias) must fit half the weight SRAM; its input tile plus INT32 accumulators half the activation SRAM. Half, so the same tiling is double-bufferable. The accumulators are charged to the activation SRAM.
+- **Search:** per layer and scheme, over mt in {R x 2^j, M}, nt in {C x 2^j, N}, kt in {2^j, K}; the winner has the fewest double-buffered cycles (ties: fewer no-overlap cycles, fewer DRAM bytes, bigger tiles). Vector layers search their tile count the same way.
+- **No overlap** = sum of compute + load + store cycles. **Double buffered** = `load[0] + sum_i max(compute[i], load[i+1] + store[i-1]) + store[last]`: the first tile's load is exposed, then each step costs the longer of its compute and the DMA work running beside it. This is my reading of the spec's "first tile's transfer plus the sum over tiles of max(compute, transfer)": the spec formula taken literally counts tile 0's transfer twice, so I pair each compute with the transfers that actually run during it.
+- **Known weakness:** the no-overlap column reuses the DB-optimal tiling, so it is not independently optimised and the "DMA stalls cut" percentages are an upper estimate. It shows up as a non-monotone no-overlap total versus bandwidth.
+- **Bound:** compute-bound if a layer's total compute cycles >= its total transfer cycles. This says nothing about utilisation (KWS depthwise layers are "compute-bound" at 5.6% utilisation).
+- **Alternatives not taken:** exhaustive tile search (slow, little gain); allocating full SRAM to the no-overlap case (changes tiling between the two columns, which would confound the comparison); a third loop order (input stationary).
+
+### D28. Validation
+- `tests/test_costmodel.py` holds hand-computed cases on a 4x4 array with 4 B/cycle DMA: a single tile, two tiles under WS and OS, a K-cut with partial-sum spill, bias loading, a depthwise layer, edge tiles, a vector layer, and the pipeline formula. Further tests check that the search result fits and cannot beat an exhaustive search, that nothing-fits raises, and invariants on both real models (DB <= no overlap, utilisation in (0, 1], every MAC computed).
+
+### D29. Results files and sweeps
+- `python -m tools.run_cost_model --model cifar|kws` writes `results/cost_base_<model>.{csv,json,png}`, `_sweeps.{csv,png}`, `_layers.md`, `_summary.md`. Sweeps change one parameter at a time around the base: SRAM (both SRAMs scaled together, 1/4x to 8x), DMA bandwidth (1-64 B/cycle), array shape (4x4 ... 64x64, 8x32, 32x8). The sweep CSV holds every layer at every point.
+- **Bug caught on the way:** vector layers first used the largest tile that fits, so a bigger SRAM gave fewer tiles and *less* overlap (totals got worse as SRAM grew). Vector layers now search their tile count like GEMMs; the small remaining SRAM wobble (8 cycles on CIFAR WS) is because the tile-count candidates depend on the SRAM size.

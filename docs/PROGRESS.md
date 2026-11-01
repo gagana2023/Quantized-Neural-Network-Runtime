@@ -146,3 +146,28 @@ Activations include the pinned float32 graph input (12 KiB CIFAR, 1.9 KiB KWS). 
 - `im2col_scratch_kib` describes this NumPy kernel only (1152 KiB for CIFAR, far above the activations); it is not part of the arena.
 - No in-place reuse and no Flatten aliasing (DESIGN D21), so planned can be higher than a more aggressive planner would give.
 - `memory_kws.json` records `+dirty` because `memory_cifar.json` was untracked at that moment; the code commit is `e9a5826`.
+
+## M5 — Accelerator cost model (done)
+
+**Built:** `costmodel/mapping.py`, `costmodel/model.py`, `costmodel/sweep.py`, `costmodel/configs/base.yaml`, `tools/run_cost_model.py`, `tests/test_costmodel.py`, `docs/RESULTS.md` (draft for review).
+Run: `python -m tools.run_cost_model --model cifar` and `--model kws`.
+
+**Modelled accelerator cost, base config (not measured; `results/cost_base_<model>.json`):**
+
+| Model | Scheme | Compute cycles | No overlap | Double buffered | DMA stalls cut | Utilisation (DB) | Compute-bound / transfer-bound layers |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| CIFAR CNN | WS | 99,217 | 150,877 | 110,848 | 77.49% | 86.3% | 3 / 7 |
+| CIFAR CNN | OS | 99,217 | 166,815 | 109,583 | 84.67% | 87.3% | 3 / 7 |
+| KWS DS-CNN | WS | 29,018 | 59,014 | 42,483 | 55.11% | 24.4% | 4 / 11 |
+| KWS DS-CNN | OS | 29,018 | 62,678 | 43,747 | 56.24% | 23.7% | 4 / 11 |
+
+Per-layer tables, sweep tables and the draft interpretation are in `docs/RESULTS.md`; plots and CSVs are in `results/`.
+KWS depthwise layers run at 5.6% utilisation (one of 16 rows busy).
+
+**Checks (local):** `ruff`, `ruff format`, `mypy` clean; `pytest`: 421 passed (19 new, hand-computed cost cases included). CI has still never run (no GitHub remote).
+
+**Caveats**
+- Layers are modelled in isolation (every layer's input and output goes through DRAM); this probably overstates transfer-boundness.
+- The no-overlap column reuses the DB-optimal tiling, so "DMA stalls cut" is an upper estimate (DESIGN D27).
+- My reading of the spec's double-buffering formula differs slightly from its literal wording (DESIGN D27); please confirm.
+- Every machine parameter is an assumption; none comes from a real chip. Results JSON records `+dirty` commits because new results files were untracked when the runs started; the code commit is `ae9388d`.

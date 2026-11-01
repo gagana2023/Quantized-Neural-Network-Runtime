@@ -242,3 +242,30 @@ A static planner that decides, before running, where each activation tensor live
 3. **How do you know sharing memory did not change results?** Outputs are byte-identical with and without the planner on 100 real inputs per model in both requant modes, all intermediates on 5 inputs, with the arena pre-filled with random bytes. A test asserts no two overlapping-lifetime tensors overlap in memory, and a negative control confirms the checker catches a bad plan.
 4. **Why is the float32 input counted?** It is an activation alive for the whole run (pinned). Leaving it out would make the result look better but hide 12 KiB of CIFAR's 76 KiB.
 5. **What does it not do?** No in-place operations (output over input), no Flatten aliasing, no tensor splitting; weights and the NumPy kernels' temporaries are outside the arena (CIFAR's biggest im2col matrix is 1152 KiB, much larger than the activations). Chain models also flatter greedy; residual graphs would stress it more.
+
+## M5 — Accelerator cost model
+
+### What was built
+An analytical estimate of how many cycles a generic accelerator (an R x C array of INT8 multipliers, two on-chip SRAMs, a DMA engine to DRAM, a vector unit) would need for each layer. It is a formula, not a simulator: no hardware is run and no real chip is described.
+
+### Key pieces
+
+**1. Convolution as a GEMM.** A conv becomes a matrix multiply W[M,K] x X[K,N]: M = output channels, K = input channels x kernel height x kernel width, N = output pixels. The array does one K step per cycle for an R x C block of outputs.
+*Example:* a 3x3 conv with 16 inputs and 32 outputs on an 8x8 image: M = 32, K = 144, N = 64. On a 16x16 array: ceil(32/16) x ceil(64/16) x 144 = 2 x 4 x 144 = 1,152 cycles; MACs = 32 x 144 x 64 = 294,912, so utilisation is 294,912 / (256 x 1,152) = 100%.
+
+**2. Why depthwise is hard to keep busy.** Depthwise has one filter per channel: M = 1 per group. Only one of the R rows has work, so utilisation is at most 1/R. *My KWS numbers:* 5.6% on the 16x16 array (ceiling 6.25%), and those four layers take 47% of the network's cycles for 10.8% of its MACs.
+
+**3. Tiling and loop order.** Weights and activations do not fit on chip, so each layer is cut into tiles. *Weight stationary* keeps a weight tile resident and streams all the activation tiles past it (weights read once from DRAM). *Output stationary* keeps the output accumulators resident and streams weights and inputs for each output tile (weights re-read per output tile, but no partial sums leave the chip). Which wins depends on the layer.
+
+**4. Double buffering.** With one buffer, the array waits while the next tile loads: total = compute + transfer. With two, the DMA fills the next tile while the array works on this one, so each step costs max(compute, transfer) and only the first load and last store are exposed.
+*Example:* two tiles, compute 3 each, load 6 each, store 4 each: without overlap 3+6+4 twice = 26; with overlap 6 + max(3, 6) + max(3, 4) + 4 = 20. This is a hand-computed unit test.
+
+**5. Compute-bound vs transfer-bound.** If a layer's total compute cycles exceed its total transfer cycles it is compute-bound; otherwise transfer-bound. Bigger arrays help the first kind, more bandwidth helps the second. Being "compute-bound" is not the same as being efficient (see depthwise).
+
+### Likely interview questions
+
+1. **Walk me through your cost model.** Each layer becomes GEMMs; each GEMM is tiled to fit half of each SRAM; per tile I compute array cycles and DMA cycles; I total them with and without overlap; the tiling is chosen to minimise the overlapped total. Weight-stationary and output-stationary differ in what stays on chip, so they differ in DRAM bytes.
+2. **Why is depthwise convolution hard to keep busy? Show numbers.** One filter per channel gives M = 1, so one row of the array is used: 5.6% utilisation on my KWS depthwise layers against a 1/16 = 6.25% ceiling, 47% of the cycles for 10.8% of the MACs. A fix is mapping several channels across rows, which my model does not do.
+3. **Which layers are transfer-bound and what would help?** CIFAR 7 of 10 data-moving layers (first conv with K = 27, pools, GAP, FC, quantise/dequantise); KWS 11 of 15 (stem, pointwise convs, vector layers, FC). Doubling DMA bandwidth from 8 to 16 B/cycle cut 7.6% (CIFAR WS) and 17.8% (KWS WS) of cycles; a 32x32 array cut more cycles but dropped utilisation to 8-41%.
+4. **What does your model ignore and how might that change the conclusions?** Every layer goes through DRAM (no fusion or residency), no DRAM latency or banks, no halo refetch, no array fill/drain, no energy. The first one probably overstates transfer-boundness, so some "transfer-bound" layers would become compute-bound on real hardware.
+5. **How do you know the model is right?** I do not know it matches hardware; it is not validated against any. What I can show: hand-computed unit cases for single tiles, two-tile pipelines, partial-sum spill, depthwise and vector layers; invariants on the real models (overlap never worse than no overlap, utilisation in (0, 1]); and a bug the sweeps exposed (bigger SRAM made vector layers slower) that I fixed.
