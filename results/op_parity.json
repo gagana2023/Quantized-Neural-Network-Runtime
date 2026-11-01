@@ -1,0 +1,73 @@
+{
+  "env": {
+    "date": "2026-11-01T05:51:32+05:30",
+    "git_commit": "1ca7cf81818cef1ba7429c8b1e355cad43f39146",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.10",
+    "packages": {
+      "numpy": "2.5.4",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.1",
+      "torch": "2.15.0",
+      "torchvision": "0.29.2",
+      "PyYAML": "6.0.3"
+    },
+    "command": "python -m tools.make_op_tests "
+  },
+  "seed": 0,
+  "requant": "float",
+  "cases": 300,
+  "matched": 300,
+  "per_op": {
+    "QLinearConv": {
+      "cases": 80,
+      "matched": 80
+    },
+    "QGemm": {
+      "cases": 30,
+      "matched": 30
+    },
+    "QLinearMatMul": {
+      "cases": 20,
+      "matched": 20
+    },
+    "QLinearGlobalAveragePool": {
+      "cases": 30,
+      "matched": 30
+    },
+    "MaxPool": {
+      "cases": 25,
+      "matched": 25
+    },
+    "QuantizeLinear": {
+      "cases": 25,
+      "matched": 25
+    },
+    "DequantizeLinear": {
+      "cases": 15,
+      "matched": 15
+    },
+    "Flatten": {
+      "cases": 10,
+      "matched": 10
+    },
+    "ReduceMean": {
+      "cases": 25,
+      "matched": 25
+    },
+    "QGemmSweep": {
+      "cases": 20,
+      "matched": 20
+    },
+    "QLinearConvSweep": {
+      "cases": 10,
+      "matched": 10
+    },
+    "QuantizeSweep": {
+      "cases": 10,
+      "matched": 10
+    }
+  },
+  "failures": []
+}
