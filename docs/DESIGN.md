@@ -154,3 +154,11 @@ Each entry: the decision, the alternatives, and why.
 ### D29. Results files and sweeps
 - `python -m tools.run_cost_model --model cifar|kws` writes `results/cost_base_<model>.{csv,json,png}`, `_sweeps.{csv,png}`, `_layers.md`, `_summary.md`. Sweeps change one parameter at a time around the base: SRAM (both SRAMs scaled together, 1/4x to 8x), DMA bandwidth (1-64 B/cycle), array shape (4x4 ... 64x64, 8x32, 32x8). The sweep CSV holds every layer at every point.
 - **Bug caught on the way:** vector layers first used the largest tile that fits, so a bigger SRAM gave fewer tiles and *less* overlap (totals got worse as SRAM grew). Vector layers now search their tile count like GEMMs; the small remaining SRAM wobble (8 cycles on CIFAR WS) is because the tile-count candidates depend on the SRAM size.
+
+## M6
+
+### D30. README numbers are generated, and the fresh-clone contract
+- **Decision:** the README's results section is produced by `tools/make_readme_tables.py` from `results/*.json` (also written to `results/readme_tables.md`) and spliced between two markers. `tests/test_readme.py` fails if the committed README differs from what the script builds, so a table cannot drift from the results files. Prose in the README quotes no numbers except the ones in generated tables.
+- **Alternatives:** typing the numbers in by hand (violates the honesty rule and goes stale); a Jinja/Markdown templating dependency (more moving parts than one `split`).
+- **Fresh-clone contract:** `models/` and `data/` stay git-ignored (spec section 4: scripts regenerate them; KWS comes from Project 2). A fresh clone therefore installs, passes ruff and mypy, and passes pytest with the model-dependent tests skipped by `skipif`. The README says so, and lists the commands that regenerate the models. The committed `results/` are what the README tables are built from, so they are present on a fresh clone.
+- **Stretch goal (MobileNetV2) not attempted:** it needs QLinearAdd, QLinearAveragePool and other ops absent from both required models, i.e. a scope increase the spec says to ask about. The README says it was not done.

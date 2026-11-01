@@ -269,3 +269,26 @@ An analytical estimate of how many cycles a generic accelerator (an R x C array 
 3. **Which layers are transfer-bound and what would help?** CIFAR 7 of 10 data-moving layers (first conv with K = 27, pools, GAP, FC, quantise/dequantise); KWS 11 of 15 (stem, pointwise convs, vector layers, FC). Doubling DMA bandwidth from 8 to 16 B/cycle cut 7.6% (CIFAR WS) and 17.8% (KWS WS) of cycles; a 32x32 array cut more cycles but dropped utilisation to 8-41%.
 4. **What does your model ignore and how might that change the conclusions?** Every layer goes through DRAM (no fusion or residency), no DRAM latency or banks, no halo refetch, no array fill/drain, no energy. The first one probably overstates transfer-boundness, so some "transfer-bound" layers would become compute-bound on real hardware.
 5. **How do you know the model is right?** I do not know it matches hardware; it is not validated against any. What I can show: hand-computed unit cases for single tiles, two-tile pipelines, partial-sum spill, depthwise and vector layers; invariants on the real models (overlap never worse than no overlap, utilisation in (0, 1]); and a bug the sweeps exposed (bigger SRAM made vector layers slower) that I fixed.
+
+## M6 — Documentation and stretch goals
+
+### What was built
+A README (what the project is and is not, op table, install/test/run commands, results, limitations) whose numbers are not typed by me or by Claude Code but generated from `results/*.json` by `tools/make_readme_tables.py`. A test fails if they drift. No new numerics, memory or cost-model code.
+
+### Key pieces
+
+**1. Generated results table.** The script reads each results JSON, formats a table, and replaces the text between `<!-- RESULTS:BEGIN -->` and `<!-- RESULTS:END -->` in the README. *Example:* `memory_cifar.json` says planned = 76.0 KiB; the README row says 76.00 because the script printed that field, so if I rerun the planner and the number changes, `pytest` fails until I rerun the script.
+
+**2. Keeping three kinds of numbers apart.** Tables 1-4 are numerical correctness against ORT, table 5 is a static property of the graph, table 6 is *modelled* accelerator cycles. Host CPU wall times exist only inside the JSON files and are never quoted. This is what stops "bit-exact" and "estimated 110k cycles" from being read as the same kind of claim.
+
+**3. The fresh-clone contract.** Models and CIFAR data are git-ignored, so a new clone has no `.onnx` files. Tests that need one are skipped with a reason; the rest run. The README lists the commands that rebuild the models; KWS has to be copied in from Project 2.
+
+**4. Honest limitations.** The README states what the evidence does not cover: parity is shown for these two models and 300 single-op cases, the planner was only tried on chains, the cost model sends every layer through DRAM, CI never ran (no remote), and MobileNetV2 was not done.
+
+### Likely interview questions
+
+1. **How do you know your README numbers are real?** They are generated from committed results files, each of which records date, commit, CPU, OS, versions and the exact command; a test compares the README with the generator output.
+2. **What does "bit-exact with ORT" cover and not cover?** Float-mode requantisation matches ORT 1.31.1 on every node output of both models for 100 inputs, on the final logits of every test input, and on 300 single-op cases. It does not cover other ops, other ORT versions, or fixed-point mode, which differs by design.
+3. **Why is fixed-point mode different, and how big is it?** It uses an INT32 multiplier and shift with rounding done in integers instead of a float32 multiply, so ties and last-bit effects differ: at most 1 LSB per node in isolation, compounding to 2 (CIFAR) and 9 (KWS) LSB through the network, 45/10,000 and 18/4,888 predictions changed.
+4. **What would you do first to extend this to MobileNetV2?** Run `list_ops.py` on the quantised model, then add exactly the missing ops (QLinearAdd for residuals, QLinearAveragePool or GAP, Clip/ReLU6 handling), each with single-op ORT tests before a full-model parity run; the planner would finally be tested on branchy graphs.
+5. **What are the biggest weaknesses?** Planner evidence only on chain graphs; the cost model ignores cross-layer residency, so transfer-boundness is probably overstated; every accelerator parameter is an assumption; one fixed-point explanation (GAP ties) is a hypothesis I did not test.
