@@ -24,3 +24,8 @@ Each entry: the decision, the alternatives, and why.
 
 ### D5. CIFAR CNN architecture
 - 4 x (3x3 conv, no bias, BN, ReLU), 2 max-pools, global average pool, 1 FC (64 -> 10). Global average pool instead of flatten keeps the FC small and exercises the average-pool op.
+
+### D6. Ops found in the quantised CIFAR model
+- QuantizeLinear, QLinearConv, MaxPool, QLinearGlobalAveragePool, Flatten, com.microsoft.QGemm, DequantizeLinear. The int8rt op list is exactly this plus whatever the KWS model adds (checked in M2).
+- ReLU is absorbed by ORT's quantiser into the QLinearConv output range, so no separate relu kernel is needed for this model.
+- The model's `opset_import` lists many extra ORT domains (nchwc, training, ...); the importer must ignore opset domains and look only at node domains.

@@ -1,0 +1,29 @@
+{
+  "env": {
+    "date": "2026-11-01T05:29:39+05:30",
+    "git_commit": "fde61f0e70eb1f95fe467595bf37c6bd6cb9adde+dirty",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.10",
+    "packages": {
+      "numpy": "2.5.4",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.1",
+      "torch": "2.15.0",
+      "torchvision": "0.29.2",
+      "PyYAML": "6.0.3"
+    },
+    "command": "python -m tools.export_quantize --arch cifar"
+  },
+  "what": "Test accuracy measured by ONNX Runtime CPU (graph optimisations disabled)",
+  "test_images": 10000,
+  "calibration": {
+    "samples": 200,
+    "method": "MinMax",
+    "source": "CIFAR-10 train set"
+  },
+  "quantization": "QOperator, QInt8 activations, QInt8 weights, per-channel",
+  "ort_fp32_accuracy": 0.769,
+  "ort_int8_accuracy": 0.7694,
+  "int8rt_accuracy": null
+}

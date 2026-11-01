@@ -1,0 +1,12 @@
+model: cifar_int8.onnx
+opsets: ai.onnx=17, com.microsoft.nchwc=1, ai.onnx.ml=5, ai.onnx.training=1, ai.onnx.preview=1, ai.onnx.preview.training=1, com.microsoft.experimental=1, com.microsoft=1, org.pytorch.aten=1
+nodes: 11
+
+domain        op_type                   count
+ai.onnx       DequantizeLinear          1
+ai.onnx       Flatten                   1
+ai.onnx       MaxPool                   2
+ai.onnx       QLinearConv               4
+ai.onnx       QuantizeLinear            1
+com.microsoft QGemm                     1
+com.microsoft QLinearGlobalAveragePool  1

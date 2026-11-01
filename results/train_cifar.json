@@ -1,0 +1,56 @@
+{
+  "env": {
+    "date": "2026-11-01T05:29:11+05:30",
+    "git_commit": "fde61f0e70eb1f95fe467595bf37c6bd6cb9adde+dirty",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.10",
+    "packages": {
+      "numpy": "2.5.4",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.1",
+      "torch": "2.15.0",
+      "torchvision": "0.29.2",
+      "PyYAML": "6.0.3"
+    },
+    "command": "python -m tools.train_cifar_cnn --epochs 8"
+  },
+  "what": "FP32 PyTorch test accuracy (10000 CIFAR-10 test images)",
+  "epochs": 8,
+  "seed": 0,
+  "final_test_accuracy": 0.769,
+  "history": [
+    {
+      "epoch": 1,
+      "test_accuracy": 0.4156
+    },
+    {
+      "epoch": 2,
+      "test_accuracy": 0.4889
+    },
+    {
+      "epoch": 3,
+      "test_accuracy": 0.599
+    },
+    {
+      "epoch": 4,
+      "test_accuracy": 0.6396
+    },
+    {
+      "epoch": 5,
+      "test_accuracy": 0.6806
+    },
+    {
+      "epoch": 6,
+      "test_accuracy": 0.6895
+    },
+    {
+      "epoch": 7,
+      "test_accuracy": 0.7427
+    },
+    {
+      "epoch": 8,
+      "test_accuracy": 0.769
+    }
+  ]
+}
