@@ -115,3 +115,65 @@ M3 measures how much on the real models.
 5. **How does im2col handle depthwise and strided convolutions?** Stride only changes which windows are copied (the slice step).
    Depthwise runs the same unfold-and-multiply once per group with one input channel and one filter, which gives a matrix with
    K = kh×kw and a single row: a poor fit for a big MAC array, which is the point of the M5 analysis.
+
+## M2 — Importer, executor and single-op parity
+
+### What was built
+`int8rt/graph.py` (the internal graph), `int8rt/importer.py` (ONNX file to graph), `int8rt/ops.py` (the table of supported ops),
+`int8rt/executor.py` (runs the graph), kernels for QuantizeLinear, DequantizeLinear, MaxPool, QLinearGlobalAveragePool and ReduceMean,
+and `tools/make_op_tests.py` (300 one-op models checked bit for bit against ORT). `tools/probe_ort.py` records which float32
+formulas ORT really uses.
+
+### Key pieces
+
+**1. Importer and graph.** An ONNX file lists nodes, constants ("initialisers") and tensor names. The importer turns that into a
+`Graph`: nodes in order, and for every tensor its shape, dtype and (for int8 activations) scale and zero point. It refuses
+anything it cannot run (unknown op, unknown attribute, dynamic shape) and lists *all* problems at once.
+*Example:* `QuantizeLinear(x, scale=0.5, zp=-3) -> MaxPool` gives both output tensors scale 0.5 and zero point -3, because max-pooling
+does not change the quantisation.
+
+**2. Executor.** For each node in order: take the inputs that are not constants, call the kernel, write into the node's
+preallocated output buffer. Weights, scales and zero points are looked up once when the executor is built, not on every run.
+`dump_dir` saves every tensor so M3 can find the first node where int8rt and ORT disagree.
+
+**3. QuantizeLinear and DequantizeLinear.** Quantise: `q = clamp(round_half_even(x / scale) + zp)`. Dequantise: `x = (q - zp) * scale`.
+*Example:* scale 0.5, zp 1: x = 0.75 gives 0.75 / 0.5 = 1.5, which rounds to 2 (ties go to even), plus 1 is 3.
+
+**4. QLinearGlobalAveragePool.** The average of H×W int8 values is itself requantised: `acc = sum(x) - zp*H*W`, multiplier
+`x_scale / (y_scale * H*W)`. So it reuses the same requantiser as convolution (and therefore has both float and fixed modes).
+*Example:* x = [11, 12, 13, 14], zp 10, all scales 1: acc = 50 - 40 = 10, multiplier 1/4, exact 2.5. Float mode rounds to even: 2.
+Fixed mode rounds the tie up: 3. That is a real 1-LSB difference between the two modes, and it is a unit test.
+
+**5. MaxPool padding.** Padded positions must never win the max. Treating them as 0 would be wrong for all-negative
+windows (the max would become 0), so they are treated as -128, the smallest int8.
+
+**6. ReduceMean and why float order matters.** Float addition is not associative: in float32, `(1e8 + 1) - 1e8` is 0 but
+`(1e8 - 1e8) + 1` is 1. The KWS model has one float op, ReduceMean, between a DequantizeLinear and a QuantizeLinear. ORT adds the
+values in a specific vectorised order, so to be bit-exact int8rt adds them in the same order: 4-wide groups, two running totals
+(even and odd groups), combine, add the four lanes as `(l0+l2)+(l1+l3)`, then the leftover scalars.
+*Example:* [1e8, 1, -1e8, 1, 1, 1, 1, 1] sums to 4 in ORT's order (mean 0.5) but 6 left to right (mean 0.75). It is a unit test.
+This was the only mismatch found in M2 (MISMATCHES M-001).
+
+**7. How the parity test works.** Each case is a one-node ONNX model with random shapes, scales and zero points (fixed seed).
+ORT runs it, int8rt runs it, and the outputs must be identical bytes. Random data is a weak test of the *multiplier formula*, because
+changing `M` by one float ULP almost never changes an output. So extra "sweep" cases force `x == x_zp`, which makes the accumulator
+equal to the bias, and pass hundreds of thousands of chosen accumulators straight through the requantiser. With those, a different
+order of the multiplication was caught.
+
+### Likely interview questions
+
+1. **How do you know your runtime matches ONNX Runtime, not just on the final accuracy?** Single-op models compared byte for byte
+   (300 cases, all ops), then, in M3, every intermediate tensor of both full models. Accuracy alone can hide 1-LSB differences.
+2. **What was the one mismatch you found, and why did it happen?** ReduceMean. Float32 addition is not associative, and ORT sums with
+   Eigen's SSE2 vectorised reduction, whose order differs from `np.sum`. I found the order by testing candidate orders against ORT with
+   large inputs, then reproduced it, including how the alignment of each row's start changes the order.
+3. **Why did you restrict ReduceMean to trailing axes?** ORT uses different reduction routines for other axis patterns and I could
+   only reproduce some of them. The models only need `axes=[2,3]`, so I reject the rest with a clear error rather than claim a
+   parity I have not shown.
+4. **Why add the sweep cases instead of more random ones?** A wrong multiplier order differs by one float ULP, which only changes a
+   rounded result when `acc * M` is almost exactly on a tie. Random cases passed with the wrong formula. Putting the accumulators in the
+   bias lets me choose enough of them to hit ties. Even so the evidence is a few elements out of millions, so I describe it as consistent,
+   not proven.
+5. **Why does the importer compute shapes itself rather than call ONNX shape inference?** ONNX does not know com.microsoft ops such as
+   QGemm and QLinearGlobalAveragePool, so it cannot shape them. Writing the rules myself also means the single-op tests, which declare the
+   output shape independently, check those rules.

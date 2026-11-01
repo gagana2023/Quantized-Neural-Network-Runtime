@@ -44,3 +44,47 @@ cases are checked against an independent naive-loop implementation in both modes
 - No comparison with ORT yet; that is M2. The multiplier order `(x_scale * w_scale) / y_scale` in float32 is an assumption until then (DESIGN D8).
 - Mode B deviation from Mode A has only been unit-tested (<= 1 LSB on random accumulators); the real measurement is M3.
 - Open decision for you: single vs two-step rounding in Mode B (DESIGN D10).
+
+## M2 — Importer, executor and single-op parity (done)
+
+**Built:** `int8rt/graph.py`, `importer.py`, `ops.py` (op registry), `executor.py`; kernels `quant.py`, `pool.py` (MaxPool,
+QLinearGlobalAveragePool, ReduceMean); `tools/make_op_tests.py` (300 seeded single-op models run through ORT and int8rt);
+`tools/probe_ort.py` (which float32 formulations ORT uses). Ops implemented: exactly those in the two models (QuantizeLinear,
+DequantizeLinear, QLinearConv, QGemm, QLinearGlobalAveragePool, MaxPool, Flatten, ReduceMean) plus QLinearMatMul.
+The KWS model adds only ReduceMean (and a second DequantizeLinear/QuantizeLinear pair) to the CIFAR op list.
+
+**Checks (local, Python 3.12.10):** `ruff check` and `ruff format --check` clean, `mypy` clean, `pytest`: 375 passed
+(332 new, of which 300 are one test per parity case). CI still has not run (no GitHub remote).
+
+**Results (`results/op_parity.json`, `results/ort_probe.json`; float mode, ORT 1.31.1):**
+
+| Op family | Cases | Bit-exact vs ORT |
+| --- | --- | --- |
+| QLinearConv | 80 | 80 |
+| QLinearConv sweep (100,000 channels each) | 10 | 10 |
+| QGemm | 30 | 30 |
+| QGemm sweep (300,000 accumulators each) | 20 | 20 |
+| QLinearMatMul | 20 | 20 |
+| QLinearGlobalAveragePool | 30 | 30 |
+| MaxPool | 25 | 25 |
+| QuantizeLinear | 25 | 25 |
+| QuantizeLinear sweep (200,000 values each) | 10 | 10 |
+| DequantizeLinear | 15 | 15 |
+| Flatten | 10 | 10 |
+| ReduceMean | 25 | 25 |
+| **Total** | **300** | **300** |
+
+**Mismatches found:** one, ReduceMean (summation order); fixed, with a restriction to trailing axes. See `docs/MISMATCHES.md` M-001.
+The first run was 251/260 before the fix, so the suite does detect real differences. Also logged there: the evidence for ORT's
+multiplier order (DESIGN D8 now verified) and for QuantizeLinear dividing by the scale.
+
+**Smoke check beyond the spec:** `tests/test_executor.py` runs both full models through int8rt and ORT on 5 inputs each (random
+CIFAR inputs, real KWS features) and requires identical logits bytes; they match. This is only a smoke test. The per-layer parity
+over 100 inputs per model and the accuracy comparison are M3.
+
+**Caveats / open points**
+- The multiplier-order evidence is a handful of differing elements out of millions (rare events); consistent, not overwhelming.
+- `ReduceMean` parity assumes a 16-byte-aligned input buffer; M3 will exercise it inside the real KWS model.
+- Mode B is not compared with ORT yet (M3). `cli.py` is not written yet (arrives with the planner, M4).
+- Not implemented because they appear in neither model: QLinearAdd, QLinearAveragePool, Reshape, N-D QLinearMatMul, dilation != 1.
+- Kernel signatures differ slightly between ops with and without weights (DESIGN D14).
