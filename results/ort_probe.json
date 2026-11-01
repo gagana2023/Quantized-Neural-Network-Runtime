@@ -1,0 +1,44 @@
+{
+  "env": {
+    "date": "2026-11-01T05:51:42+05:30",
+    "git_commit": "b76a8a3eb0cd6875f502bf8ab5d2b4e7ed30f68a",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.10",
+    "packages": {
+      "numpy": "2.5.4",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.1",
+      "torch": "2.15.0",
+      "torchvision": "0.29.2",
+      "PyYAML": "6.0.3"
+    },
+    "command": "python -m tools.probe_ort "
+  },
+  "seed": 0,
+  "requant_multiplier_order": {
+    "elements": 6000000,
+    "wrong_elements": {
+      "(xs*ws)/ys  [int8rt]": 0,
+      "xs*(ws/ys)": 2,
+      "(xs/ys)*ws": 4,
+      "float64 M, rounded to float32": 2,
+      "float64 multiply with float64 M": 6
+    }
+  },
+  "quantize_linear_formula": {
+    "elements": 2000000,
+    "wrong_elements": {
+      "x / scale  [int8rt]": 0,
+      "x * (1 / scale)": 4
+    }
+  },
+  "reduce_mean_sum_order": {
+    "cases": 25,
+    "cases_with_any_wrong_element": {
+      "np.sum float32 (pairwise)": 19,
+      "left-to-right": 19,
+      "Eigen SSE2 redux emulation  [int8rt]": 0
+    }
+  }
+}
